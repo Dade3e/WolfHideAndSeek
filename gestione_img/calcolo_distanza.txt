@@ -1,0 +1,4 @@
+Distance = 10 ^ ((Measured Power -RSSI)/(10 * N))
+
+Measured Power potenza a 1 m
+d = 10^ ((-10 -RSSI)/(10*N))
