@@ -43,8 +43,8 @@ int rssi = -124;
 long lastRecvTime = millis();
 String message_recv = "";
 
-int senders[10];
-int senders_rssi[10];
+int senders[99];
+int senders_rssi[99];
 
 long lastSendTime = 0;        // last send time
 long lastCircleTime = 0;
@@ -62,7 +62,7 @@ int displayOnOff = 1; // 1 acceso
 
 int msg_counter2 = 0;
 
-int myPlayerID             = 11;      // Player ID: 0 - 99
+int myPlayerID             = 14;      // Player ID: 0 - 99
 int id_wolf                = myPlayerID;
 int myValue                = 1;
 
@@ -251,6 +251,18 @@ void setup() {
   Serial.begin(115200);
   pinMode(vbatPin, INPUT);
   //reset OLED display via software
+
+  pinMode(triggerPin, INPUT_PULLUP);
+  pinMode(displayPin, INPUT_PULLUP);
+  pinMode(speakerPin, OUTPUT);
+  pinMode(IRtransmitPin, OUTPUT);
+  pinMode(IRreceivePin, INPUT);
+
+  digitalWrite(triggerPin, HIGH);      // Not really needed if your circuit has the correct pull up resistors already but doesn't harm
+
+  irsend.begin();
+  irrecv.enableIRIn(); // Start the receiver
+
   pinMode(OLED_RST, OUTPUT);
   digitalWrite(OLED_RST, LOW);
   delay(20);
@@ -263,36 +275,9 @@ void setup() {
     for(;;); // Don't proceed, loop forever
   }
 
-  //SPI LoRa pins
-  SPI.begin(SCK, MISO, MOSI, SS);
-  //setup LoRa transceiver module
-  LoRa.setPins(SS, RST, DIO0);
-
-  if (!LoRa.begin(BAND)) {
-    Serial.println("Starting LoRa failed!");
-    while (1);
-  }
-
-  LoRa.setTxPower(2);
-
-  pinMode(triggerPin, INPUT_PULLUP);
-  pinMode(displayPin, INPUT_PULLUP);
-  pinMode(speakerPin, OUTPUT);
-  pinMode(IRtransmitPin, OUTPUT);
-  pinMode(IRreceivePin, INPUT);
-
-  //frequencyCalculations();   // Calculates pulse lengths etc for desired frequency
-  //tagCode();   
-  irsend.begin();
-  irrecv.enableIRIn(); // Start the receiver
-
-  digitalWrite(triggerPin, HIGH);      // Not really needed if your circuit has the correct pull up resistors already but doesn't harm
-
   //display.ssd1306_command(SSD1306_DISPLAYON);
-  delay(100);
   display.ssd1306_command(0x81);
   display.ssd1306_command(0x01);
-  delay(100);
   //display.dim(true);
 
   display.clearDisplay();
@@ -307,7 +292,21 @@ void setup() {
   display.print("SEEK");
   display.display();
 
+
+//SPI LoRa pins
+  SPI.begin(SCK, MISO, MOSI, SS);
+  //setup LoRa transceiver module
+  LoRa.setPins(SS, RST, DIO0);
+
+  if (!LoRa.begin(BAND)) {
+    Serial.println("Starting LoRa failed!");
+    while (1);
+  }
+
+  LoRa.setTxPower(2);
+  Serial.println("LoRa Initializing OK!");
   delay(3000);
+  Serial.println("Setup OK!");
 }
 
 void loop() {
@@ -321,7 +320,7 @@ void loop() {
     attesa_msg();
     if((millis()-lastSendTime)>1000){
       lastSendTime = millis();
-      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.2*1.1;
+      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
       if(displayOnOff == 1 && triggerState == 0)
         schermata_recv_draws();
     }
@@ -347,7 +346,7 @@ void loop() {
     receiveIR();
     if (millis() - lastSendTime > interval) {
       sendMessage();
-      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.2*1.1;
+      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
       lastSendTime = millis();            // timestamp the message
       interval = random(3000) + 9000;    // 9 - 12 seconds
       circle_size = 12;
@@ -384,7 +383,7 @@ void loop() {
     while(j < 3){
       if (millis() - lastSendTime > interval) {
         sendMessage();
-        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.2*1.1;
+        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
         lastSendTime = millis();            // timestamp the message
         interval = random(3000) + 9000;    // 9 - 12 seconds
         circle_size = 12;
@@ -407,7 +406,7 @@ void loop() {
     while(j < 4){
       if (millis() - lastSendTime > interval) {
         sendMessage();
-        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.2*1.1;
+        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
         lastSendTime = millis();            // timestamp the message
         interval = random(3000) + 9000;    // 9 - 12 seconds
         circle_size = 12;
@@ -415,7 +414,7 @@ void loop() {
       }
       if (millis() - lastCircleTime > 1500) {
         schermata_colpito(swap);
-        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.2*1.1;
+        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
         
         lastCircleTime = millis();
         swap++;
@@ -445,8 +444,6 @@ void gestioneDisplayOnOff(){
     }
   }
 }
-
-
 
 void gestioneTrigger(){
   if((millis()-lastTriggerTime)>100){

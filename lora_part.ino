@@ -36,6 +36,8 @@ void sendMessage() {
   LoRa.print(outgoing);                 // add payload
   LoRa.endPacket();                     // finish packet and send it
   msgCount++;                           // increment message ID
+  Serial.print("message sent :");
+  Serial.println(outgoing);
 }
 
 int distanza(int tmp_rssi){

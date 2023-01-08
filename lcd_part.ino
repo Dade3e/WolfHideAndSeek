@@ -42,7 +42,7 @@ void schermata_recv_draws(){
   int j=1;
   int k=0;
   int w=0;
-  for(int i=0;i<10;i++){
+  for(int i=0;i<99;i++){
     if(senders[i] == 1){      
       display.drawBitmap(42+(18*w), 34*k, rabbit16, 16, 16, WHITE);
       display.setTextSize(1);

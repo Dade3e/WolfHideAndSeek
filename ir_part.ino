@@ -18,7 +18,12 @@ void receiveIR() {
 }
 
 void controllo_colpito(int id_last_wolf){
-  if(id_last_wolf == myPlayerID){
+  if(id_last_wolf == 0){
+    if(id_wolf== myPlayerID){
+      stato = 0;
+    }
+  }
+  else if(id_last_wolf == myPlayerID){
     lastSendTime = millis()-8000;
     myValue = 2; //invio segnale che ero ex lupo
     stato = 4; //stato ex lupo
