@@ -1,5 +1,6 @@
+#!/usr/bin/env python3
 from PIL import Image
-im = Image.open("bullet3.png")
+im = Image.open("rabbit32_01.png")
 print(im.size)
 w = im.size[0]
 h = im.size[1]
@@ -23,11 +24,10 @@ print(div)
 for i in range(0, int(len(a)/div)):
 	strg = a[(i*8):(i*8+8)]
 	print("B"+strg, end= ", ")
-	#if(i%div == div-1):
-	#	print("")
+	if(i%div == div-1):
+		print("")
 for i in range(0, int(len(a)/div)):
 	strg = a[(i*8):(i*8+8)]
 	print(hex(int(strg, 2)), end= ", ")
 	#if(i%div == div-1):
 	#	print("")
-	
