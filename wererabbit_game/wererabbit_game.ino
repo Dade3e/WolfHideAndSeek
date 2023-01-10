@@ -40,14 +40,15 @@ const uint8_t vbatPin = 35;
 float VBAT;
 
 int rssi = -124;
-int txPower = 2;
+int txPower = 5;
+int spreadingFactor = 12;
 long lastRecvTime = millis();
 String message_recv = "";
 
-int senders[99];
-int senders_rssi[99];
+int senders[100];
+int senders_rssi[100];
 
-long lastSendTime = 0;        // last send time
+long lastSendTime = 0;
 long lastCircleTime = 0;
 long lastCleanTime = 0;
 long lastTriggerTime = 0;
@@ -55,8 +56,8 @@ int interval = 2000;          // interval between sends
 long msgCount = 0;
 int circle_size=12;
 
-//0 recv LUPO, 1 send PREY, 2 sparato ex lupo, 3, 4 colpito come ex lupo, 5 colpito
-int stato = 6;
+//0 recv WERERABBIT, 1 send RABBIT, 2 sparato ex wererabbit, 3, 4 colpito come ex wererabbit, 5 colpito
+int stato = 0;
 
 int myPlayerID             = 14;      // Player ID: 0 - 99
 int id_wolf                = myPlayerID;
@@ -152,6 +153,7 @@ B00000000, B00111111, B11111110, B00000000,
 B00000000, B00011111, B11111100, B00000000
 };
 
+
 const uint8_t PROGMEM rabbit32_02[] = {
 B00000000, B00111000, B00001110, B00000000, 
 B00000000, B01111100, B00011111, B00000000, 
@@ -178,12 +180,12 @@ B00000000, B11101101, B11011011, B10000000,
 B00000001, B11101101, B11011011, B11000000, 
 B00000001, B11110011, B11100111, B11000000, 
 B00000001, B11111111, B11111111, B11000000, 
+B00000001, B11111111, B11111111, B11000000,  
 B00000001, B11100110, B00110011, B11000000, 
-B00000001, B11100110, B00110011, B11000000, 
-B00000001, B11100110, B00110011, B11000000, 
+B00000001, B11100110, B00110011, B11000000,
 B00000000, B11100000, B00000011, B10000000, 
-B00000000, B01110000, B00000111, B00000000, 
-B00000000, B00111111, B11111110, B00000000, 
+B00000000, B01100000, B00000011, B00000000, 
+B00000000, B00110000, B00000110, B00000000, 
 B00000000, B00011111, B11111100, B00000000
 };
 
@@ -355,7 +357,8 @@ B11111111
 };
 //bullet 9X20
 const uint8_t PROGMEM bullet8X20[]{
-0x18, 0x3c, 0x3c, 0x7a, 0x7a, 0x7e, 0xff, 0xfd, 0xf9, 0xf9, 0xf9, 0xf9, 0xf9, 0xf9, 0xf9, 0xf9, 0xfd, 0xff, 0x7e, 0xff,
+0x18, 0x3c, 0x3c, 0x7a, 0x7a, 0x7e, 0xff, 0xfd, 0xf9, 0xf9,
+0xf9, 0xf9, 0xf9, 0xf9, 0xf9, 0xf9, 0xfd, 0xff, 0x7e, 0xff,
 };
 
 
@@ -363,7 +366,6 @@ void setup() {
   //initialize Serial Monitor
   Serial.begin(115200);
   pinMode(vbatPin, INPUT);
-  //reset OLED display via software
 
   pinMode(triggerPin, INPUT_PULLUP);
   pinMode(displayPin, INPUT_PULLUP);
@@ -371,10 +373,10 @@ void setup() {
   pinMode(IRtransmitPin, OUTPUT);
   pinMode(IRreceivePin, INPUT);
 
-  digitalWrite(triggerPin, HIGH);      // Not really needed if your circuit has the correct pull up resistors already but doesn't harm
+  digitalWrite(triggerPin, HIGH);
 
   irsend.begin();
-  irrecv.enableIRIn(); // Start the receiver
+  irrecv.enableIRIn();
 
   pinMode(OLED_RST, OUTPUT);
   digitalWrite(OLED_RST, LOW);
@@ -383,9 +385,9 @@ void setup() {
   
   //initialize OLED
   Wire.begin(OLED_SDA, OLED_SCL);
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3c, false, false)) { // Address 0x3C for 128x32
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3c, false, false)) {
     Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
+    for(;;);
   }
 
   //display.ssd1306_command(SSD1306_DISPLAYON);
@@ -417,7 +419,7 @@ void setup() {
     Serial.println("Starting LoRa failed!");
     while (1);
   }
-
+  LoRa.setSpreadingFactor(spreadingFactor);
   LoRa.setTxPower(txPower);
   Serial.println("LoRa Initializing OK!");
   delay(3000);
@@ -426,8 +428,6 @@ void setup() {
 
 
 void loop() {
-  //display.drawLine()
-  // see if a packet was received
   
   gestioneDisplayOnOff();
 
@@ -474,12 +474,12 @@ void loop() {
     }
   }
 
-  //rivecuto che ho colpito un ex lupo  
+  //rivecuto che ho colpito un ex wererabbit  
   if(stato == 2){
     
     if((millis()-lastCleanTime)>3000){
       lastCleanTime = millis();
-      stato = 0; // TORNO LUPO
+      stato = 0; // TORNO WERERABBIT
     }
   }
 
@@ -487,22 +487,23 @@ void loop() {
   if(stato == 3){
     if((millis()-lastCleanTime)>3000){
       lastCleanTime = millis();
-      stato = 1; //DIVENTO PREY
+      stato = 1; //DIVENTO RABBIT
     }
   }
 
-  //colpito ma sono ex lupo
+  //colpito ma sono ex wererabbit
   if(stato == 4){
-    stato = 1; //RIMANGO PREY
-    myValue = 2; //invio segnale che ero ex lupo
+    stato = 1; //RIMANGO RABBIT
+    myValue = 2; //invio segnale che ero ex wererabbit
     int j = 0;
     while(j < 3){
       if (millis() - lastSendTime > interval) {
         sendMessage();
         VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
-        lastSendTime = millis();            // timestamp the message
+        lastSendTime = millis();
         interval = random(3000) + 9000;    // 9 - 12 seconds
-        circle_size = 12;
+        circle_size = 16;
+        rabbit_draw=0;
         j++;
       }
       if (millis() - lastCircleTime > 300) {
@@ -515,7 +516,7 @@ void loop() {
 
   //Sono stato colpito
   if(stato == 5){
-    stato = 0; //DIVENTO LUPO
+    stato = 0; //DIVENTO WERERABBIT
     myValue = 3;
     int j = 0;
     while(j < 4){
@@ -527,7 +528,7 @@ void loop() {
         circle_size = 12;
         j++;
       }
-      if (millis() - lastCircleTime > 1500) {
+      if (millis() - lastCircleTime > 1000) {
         schermata_colpito();
         VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
         
@@ -537,11 +538,14 @@ void loop() {
     myValue = 1; 
   }
 
-  
   if(stato == 6){
-    schermata_ex_wererabbit();
+    VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
+    //schermata_ex_wererabbit();
     //schermata_HIT();
     //schermata_send_wererabbit();
+    //schermata_colpito();
+    schermata_send();
+    delay(1000);
   }
 }
 
@@ -574,5 +578,3 @@ void gestioneTrigger(){
     }
   }
 }
-
-
