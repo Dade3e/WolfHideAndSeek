@@ -25,8 +25,8 @@ void controllo_colpito(int id_last_wolf){
   }
   else if(id_last_wolf == myPlayerID){
     lastSendTime = millis()-8000;
-    myValue = 2; //invio segnale che ero ex lupo
-    stato = 4; //stato ex lupo
+    myValue = 2; //invio segnale che ero ex wererabbit
+    stato = 4; //stato ex wererabbit
   }
   else{
     lastSendTime = millis()-8000;
