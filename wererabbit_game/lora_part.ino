@@ -13,9 +13,11 @@ void attesa_msg(){
     rssi = LoRa.packetRssi();
     
     // print the Packet and RSSI
+    Serial.print("message_recv:\t");
     Serial.println(message_recv);
+    Serial.print("rssi:\t\t");
     Serial.println(rssi);
-    int id = (message_recv[0] - '0')+(message_recv[1] - '0');
+    int id = (message_recv[0] - '0')*10+(message_recv[1] - '0');
     int value = message_recv[2] - '0';
     senders[id] = value;
     senders_rssi[id] = distanza(rssi);
@@ -43,7 +45,7 @@ void sendMessage() {
 int distanza(int tmp_rssi){
   //Distance = 10 ^ ((Measured Power -RSSI)/(10 * N))
   //Measured Power = -12 rssi ad 1m; N is the constant for the environmental factor. It takes a value between 2-4.
-  float tmp = (-64) - (tmp_rssi);
+  float tmp = (-72) - (tmp_rssi);
   int dist = 1;
   if(tmp != 0){
     tmp = tmp/24;
@@ -54,7 +56,7 @@ int distanza(int tmp_rssi){
 
 void check_value(int value){
   if(value == 2){
-    // RIMANGO LUPO in quanto ho colpito un ex lupo ma invio al lupo che ha sbagliato preda
+    // RIMANGO WERERABBIT in quanto ho colpito un ex wererabbit, ma invio al wererabbit che ha sbagliato preda
     stato = 2;
     if(displayOnOff == 1)
       schermata_ex_wererabbit();
