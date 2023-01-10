@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from PIL import Image
-im = Image.open("infected_rabbit_3.png")
+im = Image.open("infected_rabbit.png")
 print(im.size)
 w = im.size[0]
 h = im.size[1]
@@ -29,5 +29,5 @@ for i in range(0, int(len(a)/div)):
 for i in range(0, int(len(a)/div)):
 	strg = a[(i*8):(i*8+8)]
 	print(hex(int(strg, 2)), end= ", ")
-	if(i%(div*2) == (div*2)-1):
+	if(i%div == div-1):
 		print("")

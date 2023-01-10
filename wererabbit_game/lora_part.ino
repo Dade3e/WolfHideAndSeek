@@ -57,7 +57,7 @@ void check_value(int value){
     // RIMANGO LUPO in quanto ho colpito un ex lupo ma invio al lupo che ha sbagliato preda
     stato = 2;
     if(displayOnOff == 1)
-      schermata_ex_lupo();
+      schermata_ex_wererabbit();
     lastCleanTime = millis();
   }
 

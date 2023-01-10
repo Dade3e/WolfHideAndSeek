@@ -102,16 +102,24 @@ void schermata_recv_draws(){
      
 }
 
-void schermata_ex_lupo(){
+void schermata_ex_wererabbit(){
   display.clearDisplay();
-  display.drawBitmap(0, 16, rabbit32_01, 32, 32, WHITE);
-  display.drawBitmap(64, 8, rabbit32_04, 32, 32, WHITE);
+  display.drawBitmap(6, 24, rabbit16, 16, 16, WHITE);
+  display.drawBitmap(50, 12, rabbit32_05, 32, 32, WHITE);
   display.setTextSize(1);
-  display.setCursor(58,56);
-  display.print("LAST WOLF");
+  display.setCursor(90,16);
+  display.print("YOU");
+  display.setCursor(90,28);
+  display.print("HIT");
+  display.setCursor(90,40);
+  display.print("LAST");
+  display.setCursor(50,52);
+  display.print("WERE-RABBIT");
   display.setTextSize(1);
   display.setCursor(0,0);
-  display.print((millis()-lastRecvTime)/1000);
+  display.print("Id:");
+  display.setCursor(20,0);
+  display.print(myPlayerID);
   display.setCursor(0,56);
   display.print(VBAT);
   display.display();
@@ -144,7 +152,7 @@ void schermata_send(){
   circle_size += 2;
 }
 
-void schermata_send_wolf(){
+void schermata_send_wererabbit(){
   display.clearDisplay();
   display.setTextSize(1);
   display.setCursor(0,56);
@@ -156,7 +164,7 @@ void schermata_send_wolf(){
   display.print("id:");
   display.setCursor(5,32);
   display.print(myPlayerID);
-  display.drawBitmap(49, 18, rabbit32_01, 32, 32, WHITE);
+  display.drawBitmap(49, 18, rabbit32_05, 32, 32, WHITE);
   display.setCursor(100,20);
   display.print("msg:");
   display.setCursor(105,32);
