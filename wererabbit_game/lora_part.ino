@@ -20,8 +20,10 @@ void attesa_msg(){
     int id = (message_recv[0] - '0')*10+(message_recv[1] - '0');
     int value = message_recv[2] - '0';
     senders[id] = value;
-    senders_rssi[id] = distanza(rssi);
-
+    //if(senders_rssi[id] == 0)
+    //  senders_rssi[id] = distanza(rssi);
+    //senders_rssi[id] = int((senders_rssi[id] + distanza(rssi))/2);
+    senders_rssi[id] = rssi;
     check_value(value);
     
     lastRecvTime = millis();
@@ -44,8 +46,8 @@ void sendMessage() {
 
 int distanza(int tmp_rssi){
   //Distance = 10 ^ ((Measured Power -RSSI)/(10 * N))
-  //Measured Power = -12 rssi ad 1m; N is the constant for the environmental factor. It takes a value between 2-4.
-  float tmp = (-72) - (tmp_rssi);
+  //Measured Power =  rssi ad 1m; N is the constant for the environmental factor. It takes a value between 2-4.
+  float tmp = (-58) - (tmp_rssi);
   int dist = 1;
   if(tmp != 0){
     tmp = tmp/24;

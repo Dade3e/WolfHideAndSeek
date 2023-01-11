@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from PIL import Image
-im = Image.open("infected_rabbit_3.png")
+im = Image.open("wererabbit64.png")
 print(im.size)
 w = im.size[0]
 h = im.size[1]

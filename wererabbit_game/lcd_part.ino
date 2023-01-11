@@ -1,3 +1,67 @@
+void choose_game(){
+  display.clearDisplay();
+  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
+  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
+  display.drawBitmap(72, 59, rombo, 8, 5, WHITE);
+  display.display();  
+}
+
+void wererabbit_first_frame(){
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
+  //display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(66,8);
+  display.print("WERE");
+  display.setCursor(90,14);
+  display.print("RABBIT");
+  display.setCursor(80,36);
+  display.print("HIDE &");
+  display.setCursor(86,48);
+  display.print("SEEK");
+  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
+  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
+  display.drawBitmap(72, 59, rombo, 8, 5, WHITE);
+  display.display();
+}
+
+void infected_first_frame(){
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  //display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
+  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(70,12);
+  display.print("INFECTED");
+  display.setCursor(80,36);
+  display.print("HIDE &");
+  display.setCursor(86,48);
+  display.print("SEEK");
+  display.drawBitmap(54, 59, rombo, 8, 5, WHITE);
+  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
+  display.drawRoundRect(72, 60, 3, 3, 1, WHITE);
+  display.display();
+}
+
+void flag_first_frame(){
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  //display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
+  display.drawBitmap(16, 24, rabbit16, 16, 16, WHITE);
+  display.setTextSize(1);
+  display.setCursor(70,12);
+  display.print("CAPTURE");
+  display.setCursor(80,36);
+  display.print("THE HIDE");
+  display.setCursor(86,48);
+  display.print("FLAG");
+  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
+  display.drawBitmap(62, 59, rombo, 8, 5, WHITE);
+  display.drawRoundRect(72, 60, 3, 3, 1, WHITE);
+  display.display();
+}
+
 
 void schermata_recv(){
   int offset = 7;
@@ -42,7 +106,7 @@ void schermata_recv_draws(){
   int k=0;
   int w=0;
   for(int i=0;i<100;i++){
-    if(senders[i] == 1){      
+    if(senders[i] == 1){
       display.drawBitmap(42+(18*w), 29*k, rabbit16, 16, 16, WHITE);
       display.setTextSize(1);
       if(senders_rssi[i] < 100){
@@ -62,6 +126,7 @@ void schermata_recv_draws(){
     }
       
   }
+  
   display.setCursor(0,0);
   display.print("Id:");
   display.setCursor(20,0);
