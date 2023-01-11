@@ -1,9 +1,46 @@
-void choose_game(){
+void choose_game(int chooses, int pos){
   display.clearDisplay();
-  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
-  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
-  display.drawBitmap(72, 59, rombo, 8, 5, WHITE);
+  //display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
+  //display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
+  //display.drawBitmap(70, 59, rombo, 8, 5, WHITE);
+  choose_v_option(chooses,pos);
   display.display();  
+}
+
+void choose_h_option(int chooses, int pos){
+  if(chooses%2 == 0){
+    for(int i = -chooses/2; i < chooses/2; i++){
+      if(i + chooses/2 == pos)
+        display.drawBitmap(66+(8*i), 59, rombo, 8, 5, WHITE);
+      else
+        display.drawRoundRect(68+(8*i), 60, 3, 3, 1, WHITE);
+    }
+  }else{
+    for(int i = -chooses/2; i <= chooses/2; i++){
+      if(i + chooses/2 == pos)
+        display.drawBitmap(62+(8*i), 59, rombo, 8, 5, WHITE);
+      else
+        display.drawRoundRect(64+(8*i), 60, 3, 3, 1, WHITE);
+    }
+  }
+}
+
+void choose_v_option(int chooses, int pos){
+  if(chooses%2 == 0){
+    for(int i = -chooses/2; i < chooses/2; i++){
+      if(i + chooses/2 == pos)
+        display.drawBitmap(120, 35+(8*i), rombo, 8, 5, WHITE);
+      else
+        display.drawRoundRect(122, 36+(8*i), 3, 3, 1, WHITE);
+    }
+  }else{
+    for(int i = -chooses/2; i <= chooses/2; i++){
+      if(i + chooses/2 == pos)
+        display.drawBitmap(120, 31+(8*i), rombo, 8, 5, WHITE);
+      else
+        display.drawRoundRect(122, 32+(8*i), 3, 3, 1, WHITE);
+    }
+  }
 }
 
 void wererabbit_first_frame(){
@@ -20,9 +57,7 @@ void wererabbit_first_frame(){
   display.print("HIDE &");
   display.setCursor(86,46);
   display.print("SEEK");
-  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
-  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
-  display.drawBitmap(72, 59, rombo, 8, 5, WHITE);
+  choose_h_option(3,0);
   display.display();
 }
 
@@ -38,9 +73,7 @@ void infected_first_frame(){
   display.print("HIDE &");
   display.setCursor(86,46);
   display.print("SEEK");
-  display.drawBitmap(54, 59, rombo, 8, 5, WHITE);
-  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
-  display.drawRoundRect(72, 60, 3, 3, 1, WHITE);
+  choose_h_option(3,1);
   display.display();
 }
 
@@ -58,9 +91,7 @@ void flag_first_frame(){
   display.print("HIDE");
   display.setCursor(88,46);
   display.print("FLAG");
-  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
-  display.drawBitmap(62, 59, rombo, 8, 5, WHITE);
-  display.drawRoundRect(72, 60, 3, 3, 1, WHITE);
+  choose_h_option(3,2);
   display.display();
 }
 

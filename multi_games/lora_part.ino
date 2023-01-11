@@ -20,10 +20,10 @@ void attesa_msg_wererabbit(){
     int id = (message_recv[0] - '0')*10+(message_recv[1] - '0');
     int value = message_recv[2] - '0';
     senders[id] = value;
-    //if(senders_rssi[id] == 0)
-    //  senders_rssi[id] = distanza(rssi);
-    //senders_rssi[id] = int((senders_rssi[id] + distanza(rssi))/2);
-    senders_rssi[id] = rssi;
+    if(senders_rssi[id] == 0)
+      senders_rssi[id] = distanza(rssi);
+    senders_rssi[id] = int((senders_rssi[id] + distanza(rssi))/2);
+    //senders_rssi[id] = rssi;
     check_value_wererabbit(value);
     
     lastRecvTime = millis();
