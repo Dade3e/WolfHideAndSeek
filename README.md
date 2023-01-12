@@ -21,7 +21,7 @@ Allo scadere del tempo mostrato a display, perde chi è il wererabbit o lo sta d
 ### infected
 Ogni giocatore ha un arma e i ricevitori ir.
 Il gioco si divide in infetto e sani,
-Gli infetti non possono sparare, i sani si.
+Gli infetti non possono sparare, i sani si ma con munizioni limitate.
 
 Il gioco inizia con l'infetto che si nasconde.
 L'infetto ha il sensore di prossimità il quale vede la distanza dai sani.
