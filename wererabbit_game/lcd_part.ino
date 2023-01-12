@@ -30,6 +30,9 @@ void schermata_recv_draws(){
       if(senders_rssi[i] < 100){
         display.setCursor(45+(18*w), 29*k+18);
         display.print(senders_rssi[i]);
+        //Serial.println(senders_rssi[i]);
+        //display.fillRect(43+(18*w), 29*k+18, senders_rssi[i], 3, WHITE);
+        //display.drawBitmap(42+(19*w), 29*k+18, little_infin, 16, 5, WHITE);
       }
       else{
         display.drawBitmap(42+(19*w), 29*k+18, little_infin, 16, 5, WHITE);
@@ -49,6 +52,8 @@ void schermata_recv_draws(){
   display.print("Id:");
   display.setCursor(20,0);
   display.print(myPlayerID);
+  display.setCursor(56,56);
+  display.print(gameTimer);
   display.setTextSize(1);
   display.setCursor(105,56);
   display.print((millis()-lastRecvTime)/1000);
@@ -96,6 +101,8 @@ void schermata_send(){
   display.print("msg:");
   display.setCursor(102,32);
   display.print(msgCount);
+  display.setCursor(56,56);
+  display.print(gameTimer);
   if(circle_size<60)
     display.drawCircle(64,32,circle_size,WHITE);
   display.setTextSize(1);
@@ -200,15 +207,6 @@ void schermata_colpito(){
 
 void schermata_nera(){
   display.clearDisplay();
-  display.setTextColor(BLACK);
-  display.setTextSize(1);
-  display.setCursor(0,56);
-  display.print(VBAT);
-  display.setCursor(0,20);
-  display.print("id:");
-  display.setCursor(5,32);
-  display.print(myPlayerID);
-  display.setTextColor(WHITE);
   display.display();
 }
 
@@ -249,12 +247,33 @@ void schermata_shoot(){
   display.display();
 }
 
-void schermata_icons(){
+void schermata_win(){
   display.clearDisplay();
-  display.drawBitmap(0, 0, rabbit32_01, 32, 32, WHITE);
-  display.drawBitmap(32, 0, rabbit32_02, 32, 32, WHITE);
-  display.drawBitmap(64, 0, rabbit32_03, 32, 32, WHITE);
-  display.drawBitmap(96, 0, rabbit32_04, 32, 32, WHITE);
-  display.drawBitmap(0, 32, rabbit32_05, 32, 32, WHITE);
+  display.setTextColor(WHITE);
+  display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(66,8);
+  display.print("WERE");
+  display.setCursor(90,14);
+  display.print("RABBIT");
+  display.setCursor(80,34);
+  display.print("YOU");
+  display.setCursor(86,46);
+  display.print("WIN");
+  display.display();
+}
+void schermata_lose(){
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(66,8);
+  display.print("WERE");
+  display.setCursor(90,14);
+  display.print("RABBIT");
+  display.setCursor(80,34);
+  display.print("YOU");
+  display.setCursor(86,46);
+  display.print("LOSE");
   display.display();
 }

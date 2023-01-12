@@ -23,10 +23,13 @@ IRsend irsend(IRtransmitPin);
 
 
 //0 recv WERERABBIT, 1 send RABBIT, 2 sparato ex wererabbit, 3, 4 colpito come ex wererabbit, 5 colpito
-int stato = 0;
+int stato = 0;               //scelta se essere cacciatore o preda
 
 int myPlayerID             = 15;      // Player ID: 1 - 99
 int id_wolf                = myPlayerID;
+
+long gameTime = 30 * 60 ;
+long gameTimer = gameTime -1; //se metto -1 starta subito
 
 void setup() { 
   //initialize Serial Monitor
@@ -77,8 +80,7 @@ void setup() {
   Serial.println("LoRa Initializing OK!");
 
   wererabbit_first_frame();
-    
-  delay(3000);
+
   Serial.println("Setup OK!");
 }
 
@@ -86,6 +88,27 @@ void setup() {
 void loop() {
   
   gestioneDisplayOnOff();
+
+  if(gameTimer == gameTime){
+    Serial.println("START GAME!");
+    wererabbit_first_frame();
+    waitStartGame();
+    //quando esce inizio a giocare
+    gameTimer -= 1;
+  }
+
+  if((millis() - lastGameTime) > 1000){
+    lastGameTime = millis();
+    gameTimer -= 1;
+  }
+
+  if(gameTimer <= 0){
+    Serial.println("END GAME!");
+    fineGioco();
+    waitStartGame();
+    gameTimer == gameTime;
+  }
+    
 
   if(stato == 0){
     //RECV and SHOOT
@@ -96,7 +119,8 @@ void loop() {
       if(displayOnOff == 1 && triggerState == 0)
         schermata_recv_draws();
     }
-    if((millis()-lastCleanTime)>60000){
+    if((millis()-lastRecvTime_ctl)>36000){
+      lastRecvTime_ctl = millis();
       lastCleanTime = millis();
       memset(senders, 0, sizeof(senders));
     }
@@ -123,7 +147,7 @@ void loop() {
       interval = random(3000) + 9000;    // 9 - 12 seconds
       circle_size = 12;
     }
-    if (millis() - lastCircleTime > 300) {
+    if (millis() - lastCircleTime > 340) {
         if(displayOnOff == 1)
           schermata_send();
       lastCircleTime = millis();
@@ -196,6 +220,38 @@ void loop() {
 
 }
 
+void waitStartGame(){
+  Serial.println("Wait trigger!");
+  
+  delay(100);
+  int exit = 0;
+  triggerState = 0;
+  unsigned long tempo_start = millis();
+  while(exit == 0){
+    if(triggerState == 0 && digitalRead(triggerPin) == LOW){
+      triggerState = 1;
+      tempo_start = millis();
+    }
+    if((millis()-lastTriggerTime)>100){
+      lastTriggerTime = millis();
+      if(triggerState == 1 && digitalRead(triggerPin) == HIGH){
+        if(millis() - tempo_start > 2000)
+          exit = 1;
+      }
+    }
+  }
+  triggerState = 0;
+}
+
+void fineGioco(){
+ if(stato == 1 || stato == 4){
+   schermata_win();
+ }else{
+   schermata_lose();
+ }
+ 
+}
+
 //gestione display ON OFF
 int displayState = 0;
 int exDisplayState = 0;
@@ -224,5 +280,3 @@ void gestioneTrigger(){
     }
   }
 }
-
-

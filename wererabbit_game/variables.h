@@ -27,19 +27,24 @@ float VBAT;
 int rssi = -124;
 int txPower = 8;
 int spreadingFactor = 12;
-long lastRecvTime = millis();
+
+
 String message_recv = "";
 
 int senders[100];
 int senders_rssi[100];
 
-long lastSendTime = 0;
-long lastCircleTime = 0;
-long lastCleanTime = 0;
-long lastTriggerTime = 0;
-long lastChooseTime = 0;
+unsigned long lastGameTime = 0;
+unsigned long lastSendTime = 0;
+unsigned long lastCircleTime = 0;
+unsigned long lastCleanTime = 0;
+unsigned long lastTriggerTime = 0;
+unsigned long lastChooseTime = 0;
+
+unsigned long lastRecvTime = 0;
+unsigned long lastRecvTime_ctl = 0;
 int interval = 2000;          // interval between sends
-long msgCount = 0;
+unsigned long msgCount = 0;
 int circle_size=12;
 
 int myValue                = 1;

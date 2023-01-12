@@ -9,9 +9,11 @@ void attesa_msg(){
     while (LoRa.available()) {
       message_recv += (char)LoRa.read();
     }
-    
+    if((millis()-lastCleanTime)>60000){
+      lastCleanTime = millis();
+      memset(senders, 0, sizeof(senders));
+    }
     rssi = LoRa.packetRssi();
-    
     // print the Packet and RSSI
     Serial.print("message_recv:\t");
     Serial.println(message_recv);
@@ -21,12 +23,14 @@ void attesa_msg(){
     int value = message_recv[2] - '0';
     senders[id] = value;
     //if(senders_rssi[id] == 0)
-    //  senders_rssi[id] = distanza(rssi);
+    senders_rssi[id] = distanza(rssi);
     //senders_rssi[id] = int((senders_rssi[id] + distanza(rssi))/2);
-    senders_rssi[id] = rssi;
+    //senders_rssi[id] = rssi;
+    //senders_rssi[id] = disegno_forza(rssi);
     check_value(value);
     
     lastRecvTime = millis();
+    lastRecvTime_ctl = millis();
   }
 }
 
@@ -54,6 +58,15 @@ int distanza(int tmp_rssi){
     dist = int(pow(10,(tmp)));
   }
   return dist;
+}
+
+int disegno_forza(int tmp_rssi){
+  //Distance = 10 ^ ((Measured Power -RSSI)/(10 * N))
+  //Measured Power =  rssi ad 1m; N is the constant for the environmental factor. It takes a value between 2-4.
+  int init_rssi = 60;
+  if(-tmp_rssi < init_rssi )
+    return 14;
+  return 14 - double((-tmp_rssi - init_rssi)/4.28);
 }
 
 void check_value(int value){
