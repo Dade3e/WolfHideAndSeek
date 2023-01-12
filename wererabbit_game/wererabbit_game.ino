@@ -29,7 +29,7 @@ int myPlayerID             = 15;      // Player ID: 1 - 99
 int id_wolf                = myPlayerID;
 
 long gameTime = 30 * 60 ;
-long gameTimer = gameTime -1; //se metto -1 starta subito
+long gameTimer = gameTime; //se metto -1 starta subito
 
 void setup() { 
   //initialize Serial Monitor
