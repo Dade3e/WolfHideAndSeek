@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "heltec_wifi_lora_v1")(type "Legacy")(uri "/home/dbarchetta/Scaricati/WiFi_Kit_series-master/Kicad5_lib_footprint/Heltec_wifi_LoRa_V1/heltec_wifi_lora_v1.lib")(options "")(descr ""))
+)
