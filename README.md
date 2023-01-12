@@ -1,6 +1,6 @@
-#WERERABBIT game
+# WERERABBIT game
 
-###Materiali utilizzati:
+### Materiali utilizzati:
 - Presa Jack verticale 4 poli: https://www.amazon.it/dp/B089222S84?psc=1&ref=ppx_yo2ov_dt_b_product_details
 - EDISION 05-00-0017 Cavo Jack a IR: https://www.amazon.it/dp/B08612KY32?psc=1&ref=ppx_yo2ov_dt_b_product_details
 - Esp LoRa32: https://www.amazon.it/dp/B07RWYJQPT?psc=1&ref=ppx_yo2ov_dt_b_product_details
