@@ -1,4 +1,4 @@
-void attesa_msg_wererabbit(){
+void attesa_msg(){
   int packetSize = LoRa.parsePacket();
   
   if (packetSize) {
@@ -24,39 +24,7 @@ void attesa_msg_wererabbit(){
     //  senders_rssi[id] = distanza(rssi);
     //senders_rssi[id] = int((senders_rssi[id] + distanza(rssi))/2);
     senders_rssi[id] = rssi;
-    check_value_wererabbit(value);
-    
-    lastRecvTime = millis();
-  }
-}
-
-void attesa_msg_infected(){
-  int packetSize = LoRa.parsePacket();
-  
-  if (packetSize) {
-    Serial.println("");
-    Serial.println("Received packet!");
-    // read the packet
-    message_recv = "";
-    while (LoRa.available()) {
-      message_recv += (char)LoRa.read();
-    }
-    
-    rssi = LoRa.packetRssi();
-    
-    // print the Packet and RSSI
-    Serial.print("message_recv:\t");
-    Serial.println(message_recv);
-    Serial.print("rssi:\t\t");
-    Serial.println(rssi);
-    int id = (message_recv[0] - '0')*10+(message_recv[1] - '0');
-    int value = message_recv[2] - '0';
-    senders[id] = value;
-    //if(senders_rssi[id] == 0)
-    //  senders_rssi[id] = distanza(rssi);
-    //senders_rssi[id] = int((senders_rssi[id] + distanza(rssi))/2);
-    senders_rssi[id] = rssi;
-    check_value_infected(value);
+    check_value(value);
     
     lastRecvTime = millis();
   }
@@ -88,7 +56,7 @@ int distanza(int tmp_rssi){
   return dist;
 }
 
-void check_value_wererabbit(int value){
+void check_value(int value){
   if(value == 2){
     // RIMANGO WERERABBIT in quanto ho colpito un ex wererabbit, ma invio al wererabbit che ha sbagliato preda
     stato = 2;
@@ -99,16 +67,6 @@ void check_value_wererabbit(int value){
 
   if(value == 3){
     //INDICO HIT e DIVENTO PREDA
-    stato = 3;
-    if(displayOnOff == 1)
-      schermata_HIT();
-    lastCleanTime = millis();
-  }
-}
-
-void check_value_infected(int value){
-  if(value == 3){
-    //INDICO HIT 
     stato = 3;
     if(displayOnOff == 1)
       schermata_HIT();

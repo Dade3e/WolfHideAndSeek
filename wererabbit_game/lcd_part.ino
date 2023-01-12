@@ -1,16 +1,7 @@
-void choose_game(){
-  display.clearDisplay();
-  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
-  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
-  display.drawBitmap(72, 59, rombo, 8, 5, WHITE);
-  display.display();  
-}
-
 void wererabbit_first_frame(){
   display.clearDisplay();
   display.setTextColor(WHITE);
   display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
-  //display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
   display.setTextSize(1);
   display.setCursor(66,8);
   display.print("WERE");
@@ -20,81 +11,6 @@ void wererabbit_first_frame(){
   display.print("HIDE &");
   display.setCursor(86,46);
   display.print("SEEK");
-  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
-  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
-  display.drawBitmap(72, 59, rombo, 8, 5, WHITE);
-  display.display();
-}
-
-void infected_first_frame(){
-  display.clearDisplay();
-  display.setTextColor(WHITE);
-  //display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
-  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
-  display.setTextSize(1);
-  display.setCursor(70,12);
-  display.print("INFECTED");
-  display.setCursor(80,34);
-  display.print("HIDE &");
-  display.setCursor(86,46);
-  display.print("SEEK");
-  display.drawBitmap(54, 59, rombo, 8, 5, WHITE);
-  display.drawRoundRect(64, 60, 3, 3, 1, WHITE);
-  display.drawRoundRect(72, 60, 3, 3, 1, WHITE);
-  display.display();
-}
-
-void flag_first_frame(){
-  display.clearDisplay();
-  display.setTextColor(WHITE);
-  //display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
-  display.drawBitmap(16, 24, rabbit16, 16, 16, WHITE);
-  display.setTextSize(1);
-  display.setCursor(70,10);
-  display.print("CAPTURE");
-  display.setCursor(94,22);
-  display.print("THE");
-  display.setCursor(88,34);
-  display.print("HIDE");
-  display.setCursor(88,46);
-  display.print("FLAG");
-  display.drawRoundRect(56, 60, 3, 3, 1, WHITE);
-  display.drawBitmap(62, 59, rombo, 8, 5, WHITE);
-  display.drawRoundRect(72, 60, 3, 3, 1, WHITE);
-  display.display();
-}
-
-
-void schermata_recv(){
-  int offset = 7;
-  display.clearDisplay();
-  //display.drawBitmap(0, 0, wolf32, 32, 32, WHITE);
-  display.setTextSize(1);
-  display.setCursor(0,56);
-  display.print(VBAT);
-  display.setTextSize(1);
-  display.setCursor(0,0);
-  display.print("prey:");
-  display.setCursor(0,offset+10);
-  display.print("id");
-  display.setCursor(60,offset);
-  display.print("distance");
-  int j=1;
-  for(int i=0;i<10;i++){
-    if(senders[i] == 1){
-      display.setTextSize(1);
-      display.setCursor(36,j*10+offset);
-      //display.print(char(248));
-      display.print(i);
-      display.setCursor(60,j*10+offset);
-      display.print(senders_rssi[i]);
-      j++;
-    }
-      
-  }
-  display.setTextSize(1);
-  display.setCursor(120,56);
-  display.print((millis()-lastRecvTime)/1000);
   display.display();
 }
 
