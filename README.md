@@ -1,4 +1,36 @@
 # WERERABBIT game
+## Regole
+### Wererabbit
+Il gioco è metà tra nascondino e "ce l'hai":
+Ogni giocatore ha un arma e i sensori ir,
+Minimo di giocatori 3,
+Il gioco si divide in wererabbit e rabbits.
+Il wererabbit può sparare per passare il suo stato di wererabbit,
+i rabbit non possono sparate, solo nascondersi o scappare.
+
+A inizio gioco, il giocatore wererabbit conta per un tempo scelto dal gruppo, gli altri si nascondono.
+Ogni giocatore rabbit, ogni circa 10 secondi invia un impulso a 866mhz, il quale è ricevuto dal wererabbit,
+che lo visualizza sullo schermo come intensita di segnale trasformata circa in metri e lo aiuterà a cercare i rabbit.
+
+Quando un wererabbit trova e colpisce un rabbit, il colpito diventerà in 60 sec il nuovo wererabbit e il vecchio wererabbit diventerà un rabbit.
+Inoltre il vecchio wererabbit è immune al nuovo, ma solo a quello, non ai successivi.
+
+Allo scadere del tempo mostrato a display, perde chi è il wererabbit o lo sta diventando.
+
+
+### infected
+Ogni giocatore ha un arma e i ricevitori ir.
+Il gioco si divide in infetto e sani,
+Gli infetti non possono sparare, i sani si.
+
+Il gioco inizia con l'infetto che si nasconde.
+L'infetto ha il sensore di prossimità il quale vede la distanza dai sani.
+Se un infetto entra nel raggio dei 3 metri da un sano, il sano si infetta.
+Se un sano gli spara prima, l'infetto muore.
+
+Il gioco finisce con lo scadere del tempo e vincono gli infetti se vengono infettati tutti i sani,
+Invece vincono i sani se muoiono tutti gli infetti.
+Altrimenti è parità.
 
 ### Materiali utilizzati:
 - Presa Jack verticale 4 poli: https://www.amazon.it/dp/B089222S84?psc=1&ref=ppx_yo2ov_dt_b_product_details
