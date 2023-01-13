@@ -24,25 +24,27 @@
 const uint8_t vbatPin = 35;
 float VBAT;
 
-int rssi = -124;
 int txPower = 8;
 int spreadingFactor = 12;
-long lastRecvTime = millis();
+
+
 String message_recv = "";
 
 int senders[100];
 int senders_rssi[100];
 
-long lastSendTime = 0;
-long lastCircleTime = 0;
-long lastCleanTime = 0;
-long lastTriggerTime = 0;
-long lastChooseTime = 0;
-int interval = 2000;          // interval between sends
-long msgCount = 0;
-int circle_size=12;
+unsigned long lastGameTime = 0;
+unsigned long lastSendTime = 0;
+unsigned long lastCircleTime = 0;
+unsigned long lastCleanTime = 0;
+unsigned long lastTriggerTime = 0;
+unsigned long lastChooseTime = 0;
 
-int myValue                = 1;
+unsigned long lastRecvTime = 0;
+unsigned long lastRecvTime_ctl = 0;
+int interval = 2000;          // interval between sends
+unsigned long msgCount = 0;
+int circle_size=18;
 
 int triggerState = 0;
 int displayOnOff = 1; // 1 acceso
@@ -51,7 +53,6 @@ int msg_counter2 = 0;
 
 int ammo = 16;
 
-int rabbit_draw = 0;
 
 //Pin declarations
 int triggerPin             = 14;

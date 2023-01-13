@@ -1,12 +1,11 @@
-void wererabbit_first_frame(){
+void infected_first_frame(){
   display.clearDisplay();
   display.setTextColor(WHITE);
-  display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
-  //display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
+  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
   display.setTextSize(1);
-  display.setCursor(66,8);
-  display.print("WERE");
-  display.setCursor(90,14);
+  display.setCursor(64,6);
+  display.print("INFECTED");
+  display.setCursor(92,16);
   display.print("RABBIT");
   display.setCursor(80,34);
   display.print("HIDE &");
@@ -15,75 +14,9 @@ void wererabbit_first_frame(){
   display.display();
 }
 
-void infected_first_frame(){
-  display.clearDisplay();
-  display.setTextColor(WHITE);
-  //display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
-  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
-  display.setTextSize(1);
-  display.setCursor(70,12);
-  display.print("INFECTED");
-  display.setCursor(80,34);
-  display.print("HIDE &");
-  display.setCursor(86,46);
-  display.print("SEEK");
-  display.display();
-}
-
-void flag_first_frame(){
-  display.clearDisplay();
-  display.setTextColor(WHITE);
-  //display.drawBitmap(0, 0, wererabbit64, 64, 64, WHITE);
-  display.drawBitmap(16, 24, rabbit16, 16, 16, WHITE);
-  display.setTextSize(1);
-  display.setCursor(70,10);
-  display.print("CAPTURE");
-  display.setCursor(94,22);
-  display.print("THE");
-  display.setCursor(88,34);
-  display.print("HIDE");
-  display.setCursor(88,46);
-  display.print("FLAG");
-  display.display();
-}
-
-
-void schermata_recv(){
-  int offset = 7;
-  display.clearDisplay();
-  //display.drawBitmap(0, 0, wolf32, 32, 32, WHITE);
-  display.setTextSize(1);
-  display.setCursor(0,56);
-  display.print(VBAT);
-  display.setTextSize(1);
-  display.setCursor(0,0);
-  display.print("prey:");
-  display.setCursor(0,offset+10);
-  display.print("id");
-  display.setCursor(60,offset);
-  display.print("distance");
-  int j=1;
-  for(int i=0;i<10;i++){
-    if(senders[i] == 1){
-      display.setTextSize(1);
-      display.setCursor(36,j*10+offset);
-      //display.print(char(248));
-      display.print(i);
-      display.setCursor(60,j*10+offset);
-      display.print(senders_rssi[i]);
-      j++;
-    }
-      
-  }
-  display.setTextSize(1);
-  display.setCursor(120,56);
-  display.print((millis()-lastRecvTime)/1000);
-  display.display();
-}
-
 void schermata_recv_draws(){
   display.clearDisplay();
-  display.drawBitmap(0, 16, rabbit32_05, 32, 32, WHITE);
+  display.drawBitmap(0, 16, infected_rabbit32, 32, 32, WHITE);
   display.setTextSize(1);
   display.setCursor(0,56);
   display.print(VBAT);
@@ -91,12 +24,15 @@ void schermata_recv_draws(){
   int k=0;
   int w=0;
   for(int i=0;i<100;i++){
-    if(senders[i] == 1){
-      display.drawBitmap(42+(18*w), 29*k, rabbit16, 16, 16, WHITE);
+    if(senders[i] == 2){    // 2: rabbits
+      display.drawBitmap(42+(18*w), 29*k, angry_rabbit16, 16, 16, WHITE);
       display.setTextSize(1);
       if(senders_rssi[i] < 100){
         display.setCursor(45+(18*w), 29*k+18);
         display.print(senders_rssi[i]);
+        //Serial.println(senders_rssi[i]);
+        //display.fillRect(43+(18*w), 29*k+18, senders_rssi[i], 3, WHITE);
+        //display.drawBitmap(42+(19*w), 29*k+18, little_infin, 16, 5, WHITE);
       }
       else{
         display.drawBitmap(42+(19*w), 29*k+18, little_infin, 16, 5, WHITE);
@@ -116,6 +52,8 @@ void schermata_recv_draws(){
   display.print("Id:");
   display.setCursor(20,0);
   display.print(myPlayerID);
+  display.setCursor(56,56);
+  display.print(gameTimer);
   display.setTextSize(1);
   display.setCursor(105,56);
   display.print((millis()-lastRecvTime)/1000);
@@ -123,54 +61,39 @@ void schermata_recv_draws(){
      
 }
 
-void schermata_ex_wererabbit(){
-  display.clearDisplay();
-  display.drawBitmap(6, 24, rabbit16, 16, 16, WHITE);
-  display.drawBitmap(50, 12, rabbit32_05, 32, 32, WHITE);
-  display.setTextSize(1);
-  display.setCursor(90,16);
-  display.print("YOU");
-  display.setCursor(90,28);
-  display.print("HIT");
-  display.setCursor(90,40);
-  display.print("LAST");
-  display.setCursor(50,52);
-  display.print("WERE-RABBIT");
-  display.setTextSize(1);
-  display.setCursor(0,0);
-  display.print("Id:");
-  display.setCursor(20,0);
-  display.print(myPlayerID);
-  display.setCursor(0,56);
-  display.print(VBAT);
-  display.display();
-}
 
 void schermata_send(){
   display.clearDisplay();
   display.setTextSize(1);
+  //display.setCursor(0,0);
+  //display.print("FIND");
+  display.setCursor(0,0);
+  display.print("Id:");
+  display.setCursor(20,0);
+  display.print(myPlayerID);
+  display.setTextSize(1);
   display.setCursor(0,56);
   display.print(VBAT);
   display.setTextSize(1);
-  display.setCursor(0,0);
-  display.print("HIDE");
-  display.setCursor(0,20);
-  display.print("id:");
-  display.setCursor(0,32);
-  display.print(myPlayerID);
-  display.drawBitmap(57, 24, rabbit16, 16, 16, WHITE);
-  display.setCursor(102,20);
-  display.print("msg:");
-  display.setCursor(102,32);
-  display.print(msgCount);
-  if(circle_size<60)
-    display.drawCircle(64,32,circle_size,WHITE);
+  display.drawBitmap(0, 16, angry_rabbit32, 32, 32, WHITE);
+  // bullets
+  if(ammo > 0){
+    for(int x = 0; x<ammo; x++){
+      display.drawBitmap(40+(10*x/2), 8+((x%2)*24), bullet8X20, 8, 20, WHITE);
+    }    
+  }else{
+    display.setCursor(60,28);
+    display.print("END AMMO");
+  }
+  
+  
   display.setTextSize(1);
+  display.setCursor(56,56);
+  display.print(gameTimer);
   display.setCursor(96,56);
-  //display.print((millis()-lastSendTime));
+  //display.print(interval-(millis() - lastSendTime));
   display.print(interval);
   display.display();
-  circle_size += 2;
 }
 
 void schermata_send_wererabbit(){
@@ -179,7 +102,7 @@ void schermata_send_wererabbit(){
   display.setCursor(0,56);
   display.print(VBAT);
   display.setCursor(0,0);
-  display.print("Sending ex wererabbit");
+  display.print("Sending new infected");
   display.setCursor(0,20);
   display.print("id:");
   display.setCursor(4,32);
@@ -194,34 +117,15 @@ void schermata_send_wererabbit(){
   if(circle_size<60)
     display.drawCircle(64,32,circle_size,WHITE);
 
-  switch(rabbit_draw){
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      display.drawBitmap(48, 16, rabbit32_05, 32, 32, WHITE);
-    break;
-    case 4:
-      display.drawBitmap(48, 16, rabbit32_04, 32, 32, WHITE);
-    break;
-    case 5:
-      display.drawBitmap(48, 16, rabbit32_03, 32, 32, WHITE);
-    break;
-    case 6:
-      display.drawBitmap(48, 16, rabbit32_02, 32, 32, WHITE);
-    break;
-    default:
-      display.drawBitmap(48, 16, rabbit32_01, 32, 32, WHITE);
-    break;
-  }
-
-  rabbit_draw++;
+  display.drawBitmap(48, 16, infected_rabbit32, 32, 32, WHITE);
   display.display();
   circle_size += 2;
 }
 
-void schermata_colpito(){
+
+void schermata_wait(){
   display.clearDisplay();
+  display.drawBitmap(0, 16, skull32, 32, 32, WHITE);
   display.setTextSize(1);
   display.setCursor(0,0);
   display.print("Id:");
@@ -230,98 +134,118 @@ void schermata_colpito(){
   display.setCursor(0,56);
   display.print(VBAT);
   display.setTextSize(1);
-  display.setCursor(96,6);
-  display.print("YOU");
-  display.setCursor(96,18);
-  display.print("ARE");
-  display.setCursor(96,30);
-  display.print("THE");
-  display.setCursor(96,42);
-  display.print("NEW");
-  display.setCursor(48,54);
-  display.print("WERE-RABBIT");
-  switch(rabbit_draw){
-    case 0:
-      display.drawBitmap(48, 12, rabbit32_01, 32, 32, WHITE);
-    break;
-    case 1:
-      display.drawBitmap(48, 12, rabbit32_02, 32, 32, WHITE);
-    break;
-    case 2:
-      display.drawBitmap(48, 12, rabbit32_03, 32, 32, WHITE);
-    break;
-    case 3:
-      display.drawBitmap(48, 12, rabbit32_04, 32, 32, WHITE);
-    break;
-    default:
-      display.drawBitmap(48, 12, rabbit32_05, 32, 32, WHITE);
-    break;
-  }
-
-  rabbit_draw++;
-  if(rabbit_draw > 7)
-    rabbit_draw=0; 
-
+  display.setCursor(56,10);
+  display.print("WAIT FOR ");
+  display.setCursor(56,22);
+  display.print("THE END");
+  display.setCursor(56,34);
+  display.print("OF THE GAME");
+  display.setCursor(56,56);
+  display.print(gameTimer);
+  display.setCursor(96,56);
+  display.print(interval);
   display.display();
 }
 
 void schermata_nera(){
   display.clearDisplay();
-  display.setTextColor(BLACK);
-  display.setTextSize(1);
-  display.setCursor(0,56);
-  display.print(VBAT);
-  display.setCursor(0,20);
-  display.print("id:");
-  display.setCursor(5,32);
-  display.print(myPlayerID);
-  display.setTextColor(WHITE);
   display.display();
 }
 
 void schermata_HIT(){
   display.clearDisplay();
-  display.drawBitmap(0, 16, rabbit32_05, 32, 32, WHITE);
+  display.drawBitmap(16, 16, infected_rabbit32, 32, 32, WHITE);
   display.setTextSize(1);
-  display.setCursor(0,56);
-  display.print(VBAT);
-  display.setCursor(0,0);
-  display.print("Id:");
-  display.setCursor(20,0);
-  display.print(myPlayerID);
-
-  display.drawBitmap(62, 24, rabbit16, 16, 16, WHITE);
-  display.setTextSize(1);
-  display.setCursor(90,10);
+  display.setCursor(74,12);
   display.print("YOU");
-  display.setCursor(90,22);
+  display.setCursor(74,24);
   display.print("HIT");
-  display.setCursor(90,34);
-  display.print("A");
-  display.setCursor(90,46);
-  display.print("RABBIT");
-  display.display();
-}
-void schermata_shoot(){
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setCursor(0,56);
-  display.print(VBAT);
-  display.setTextSize(1);
-  display.drawBitmap(0, 16, rabbit32_05, 32, 32, WHITE);
-  // bullets
-  for(int x = 0; x<ammo; x++){
-    display.drawBitmap(40+(10*x/2), 8+((x%2)*24), bullet8X20, 8, 20, WHITE);
-  }
+  display.setCursor(74,36);
+  display.print("AN");
+  display.setCursor(74,48);
+  display.print("INFECTED");
   display.display();
 }
 
-void schermata_icons(){
+void schermata_infettato(){
   display.clearDisplay();
-  display.drawBitmap(0, 0, rabbit32_01, 32, 32, WHITE);
-  display.drawBitmap(32, 0, rabbit32_02, 32, 32, WHITE);
-  display.drawBitmap(64, 0, rabbit32_03, 32, 32, WHITE);
-  display.drawBitmap(96, 0, rabbit32_04, 32, 32, WHITE);
-  display.drawBitmap(0, 32, rabbit32_05, 32, 32, WHITE);
+  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(74,12);
+  display.print("YOU");
+  display.setCursor(74,24);
+  display.print("ARE");
+  display.setCursor(74,36);
+  display.print("BEEN");
+  display.setCursor(74,48);
+  display.print("INFECTED");
+  display.display();
+}
+
+void schermata_send_infected(){
+  display.clearDisplay();
+  display.drawBitmap(16, 16, infected_rabbit32, 32, 32, WHITE);
+  display.setTextSize(1);
+  display.setCursor(74,12);
+  display.print("YOU");
+  display.setCursor(74,24);
+  display.print("INFECTED");
+  display.setCursor(74,36);
+  display.print("A");
+  display.setCursor(74,48);
+  display.print("RABBIT");
+
+  if(circle_size<60)
+    display.drawCircle(32,32,circle_size,WHITE);    
+  //display.drawBitmap(48, 16, infected_rabbit32, 32, 32, WHITE);
+
+  display.setCursor(96,56);
+  display.print(interval);
+  display.display();
+  circle_size += 2;
+  display.display();
+}
+
+void schermata_colpito(){
+  display.clearDisplay();
+  display.drawBitmap(16, 16, skull32, 32, 32, WHITE);
+  display.setTextSize(1);
+  display.setCursor(74,16);
+  display.print("YOU");
+  display.setCursor(74,28);
+  display.print("ARE");
+  display.setCursor(74,40);
+  display.print("DEATH");
+  display.display();
+}
+
+void schermata_win(){
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(64,6);
+  display.print("INFECTED");
+  display.setCursor(92,16);
+  display.print("RABBIT");
+  display.setCursor(80,34);
+  display.print("YOU");
+  display.setCursor(86,46);
+  display.print("WIN");
+  display.display();
+}
+void schermata_lose(){
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(64,6);
+  display.print("INFECTED");
+  display.setCursor(92,16);
+  display.print("RABBIT");
+  display.setCursor(80,34);
+  display.print("YOU");
+  display.setCursor(86,46);
+  display.print("LOSE");
   display.display();
 }

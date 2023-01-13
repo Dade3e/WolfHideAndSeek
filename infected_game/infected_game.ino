@@ -22,11 +22,18 @@ decode_results results;
 IRsend irsend(IRtransmitPin);
 
 
-//0 recv WERERABBIT, 1 send RABBIT, 2 sparato ex wererabbit, 3, 4 colpito come ex wererabbit, 5 colpito
-int stato = 0;
+//stato = 0 : infetto, 1: rabbit, 4: ho infettato, 5: invio hit, 6: death
+int stato                  = 1;     //scelta se essere cacciatore o preda
+int myPlayerID             = 13;     // Player ID: 1 - 99
 
-int myPlayerID             = 15;      // Player ID: 1 - 99
-int id_wolf                = myPlayerID;
+//myValue = 1: infected, 2: rabbit, 3: risposta hit ir, 4: colpito rssi, 5: death
+int myValue                = stato + 1;
+int idShotMe               = myPlayerID;
+
+long gameTime = 30 * 60 ;
+long gameTimer = gameTime -1; //se metto -1 starta subito
+
+int sogliaRSSI = -60;
 
 void setup() { 
   //initialize Serial Monitor
@@ -78,7 +85,6 @@ void setup() {
 
   infected_first_frame();
 
-  delay(3000);
   Serial.println("Setup OK!");
 }
 
@@ -87,101 +93,104 @@ void loop() {
   
   gestioneDisplayOnOff();
 
+  if(gameTimer == gameTime){
+    Serial.println("START GAME!");
+    infected_first_frame();
+    waitStartGame();
+    //quando esce inizio a giocare
+    gameTimer -= 1;
+  }
+
+  if((millis() - lastGameTime) > 1000){
+    lastGameTime = millis();
+    gameTimer -= 1;
+  }
+
+  if(gameTimer <= 0){
+    Serial.println("END GAME!");
+    fineGioco();
+    waitStartGame();
+    gameTimer == gameTime;
+  }
+    
+
   if(stato == 0){
-    //RECV and SHOOT
-    attesa_msg();
+    //SONO L INFETTO, ascolto ricevitore ir e rssi degli altri
+    receiveIR();
+    attesa_msg_infected();
     if((millis()-lastSendTime)>1000){
       lastSendTime = millis();
       VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
       if(displayOnOff == 1 && triggerState == 0)
         schermata_recv_draws();
     }
-    if((millis()-lastCleanTime)>60000){
+    if((millis()-lastRecvTime_ctl)>36000){
+      lastRecvTime_ctl = millis();
       lastCleanTime = millis();
       memset(senders, 0, sizeof(senders));
     }
-    if(triggerState == 0 && digitalRead(triggerPin) == LOW){
-      shoot();
-      if(displayOnOff == 1)
-        schermata_shoot();
-      triggerState = 1;
-      ammo--;
-      if(ammo <= 0)
-        ammo = 16;
-    }
-    gestioneTrigger();
-    
   }
 
   if(stato == 1){
-    //SEND
-    receiveIR();
+    //HUNTER, invio posizione e ricevo se ho colpito, value = 2
+    attesa_msg_hit();
     if (millis() - lastSendTime > interval) {
       sendMessage();
       VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
       lastSendTime = millis();            // timestamp the message
       interval = random(3000) + 9000;    // 9 - 12 seconds
-      circle_size = 12;
     }
-    if (millis() - lastCircleTime > 300) {
-        if(displayOnOff == 1)
-          schermata_send();
-      lastCircleTime = millis();
-    }
-  }
-
-  //rivecuto che ho colpito un ex wererabbit  
-  if(stato == 2){
-    
-    if((millis()-lastCleanTime)>3000){
+    if((millis()-lastCleanTime)>1000){
       lastCleanTime = millis();
-      stato = 0; // TORNO WERERABBIT
+      if(displayOnOff == 1)
+        schermata_send();
     }
+    if(triggerState == 0 && digitalRead(triggerPin) == LOW && ammo > 0){
+      shoot();
+      triggerState = 1;
+      ammo--;
+      //if(ammo <= 0)
+      //  ammo = 16;
+      if(displayOnOff == 1)
+        schermata_send();
+    }
+    gestioneTrigger();
   }
 
-  //colpito 
-  if(stato == 3){
-    if((millis()-lastCleanTime)>3000){
-      lastCleanTime = millis();
-      stato = 1; //DIVENTO RABBIT
-    }
-  }
-
-  //colpito ma sono ex wererabbit
+  //sono infetto e invio di aver infettato
   if(stato == 4){
-    stato = 1; //RIMANGO RABBIT
-    myValue = 2; //invio segnale che ero ex wererabbit
     int j = 0;
-    while(j < 3){
+    //invio 3 volte che ho infettato, poi torno ad avere valore infetto
+    while(j < 4 && stato == 4){
+      receiveIR();
+      attesa_msg_infected();
       if (millis() - lastSendTime > interval) {
         sendMessage();
         VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
         lastSendTime = millis();
         interval = random(3000) + 9000;    // 9 - 12 seconds
-        circle_size = 16;
-        rabbit_draw=0;
+        circle_size = 18;
         j++;
       }
       if (millis() - lastCircleTime > 300) {
-        schermata_send();
+        schermata_send_infected();
         lastCircleTime = millis();
       }
     }
+    stato = 0; //RITORNO INFETTO
     myValue = 1;
   }
 
-  //Sono stato colpito
+  //Sono infetto e sono stato colpito
   if(stato == 5){
-    stato = 0; //DIVENTO WERERABBIT
-    myValue = 3;
     int j = 0;
-    while(j < 4){
+    //invio per 2 volte che sono stato colpito per far comparire la scritta HIT all altro giocatore.
+    while(j < 2){
       if (millis() - lastSendTime > interval) {
         sendMessage();
         VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
         lastSendTime = millis();            // timestamp the message
         interval = random(3000) + 9000;    // 9 - 12 seconds
-        circle_size = 12;
         j++;
       }
       if (millis() - lastCircleTime > 1000) {
@@ -191,7 +200,91 @@ void loop() {
         lastCircleTime = millis();
       }
     }
-    myValue = 1; 
+    stato = 6;
+    myValue = 5;
+  }
+
+  if(stato == 6){
+    attesa_msg(); // aggiorno valori giocatori
+    if (millis() - lastCircleTime > 1000) {
+      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
+      if(displayOnOff == 1)
+        schermata_wait();
+      lastCircleTime = millis();
+    }
+    if (millis() - lastSendTime > interval) {
+      sendMessage();
+      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
+      lastSendTime = millis();            // timestamp the message
+      interval = random(3000) + 9000;    // 9 - 12 seconds
+    }
+  }
+
+  if(stato == 7){
+    VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
+    //schermata_HIT();
+    //schermata_colpito();
+    //schermata_infettato();
+    schermata_send_infected();
+    //schermata_wait();
+    delay(300);
+  }
+
+}
+
+void waitStartGame(){
+  Serial.println("Wait trigger!");
+  
+  delay(100);
+  int exit = 0;
+  triggerState = 0;
+  unsigned long tempo_start = millis();
+  while(exit == 0){
+    if(triggerState == 0 && digitalRead(triggerPin) == LOW){
+      triggerState = 1;
+      tempo_start = millis();
+    }
+    if((millis()-lastTriggerTime)>100){
+      lastTriggerTime = millis();
+      if(triggerState == 1 && digitalRead(triggerPin) == HIGH){
+        if(millis() - tempo_start > 2000)
+          exit = 1;
+      }
+    }
+  }
+  triggerState = 0;
+}
+
+void fineGioco(){
+  int infects = 0;
+  int rabbits = 0;
+  int death = 0;
+  for(int i = 0; i<100; i++){
+      if(senders[i] == 1){
+        infects++;
+      }
+      else if(senders[i] == 2){
+        rabbits++;
+      }
+      else{
+        death++;
+      }
+    }
+  if(stato == 0){
+    schermata_win();
+  }
+  if(infects > 0){
+    if(stato == 1)
+      schermata_lose();
+    else
+      schermata_win();
+  }else if(rabbits > 0){
+    if(stato == 1)
+      schermata_win();
+    else
+      schermata_lose();
+  }else{
+    schermata_lose();
   }
 
 }
@@ -224,5 +317,3 @@ void gestioneTrigger(){
     }
   }
 }
-
-

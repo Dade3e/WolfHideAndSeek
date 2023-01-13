@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from PIL import Image
-im = Image.open("rabbit32_01.png")
+im = Image.open("inv_skull02.png")
 print(im.size)
 w = im.size[0]
 h = im.size[1]
