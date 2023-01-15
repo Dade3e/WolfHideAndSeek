@@ -157,6 +157,30 @@ void loop() {
     gestioneTrigger();
   }
 
+  if(stato == 2){
+    //SONO L INFETTO, ascolto ricevitore ir e rssi degli altri
+    int j = 0;
+    //invio 3 volte che ho infettato, poi torno ad avere valore infetto
+    while(j < 3 && stato == 2){
+      receiveIR();
+      attesa_msg_infected();
+      if((millis()-lastSendTime)>1000){
+        lastSendTime = millis();
+        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
+        if(displayOnOff == 1 && triggerState == 0)
+          schermata_infettato();
+        j++;
+      }
+      if((millis()-lastRecvTime_ctl)>36000){
+        lastRecvTime_ctl = millis();
+        lastCleanTime = millis();
+        memset(senders, 0, sizeof(senders));
+      }
+    }
+    stato = 0;
+    myValue = 1;
+  }
+
   //sono infetto e invio di aver infettato
   if(stato == 4){
     int j = 0;

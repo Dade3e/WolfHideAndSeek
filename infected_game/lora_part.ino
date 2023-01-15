@@ -149,7 +149,7 @@ void check_value_hit(int value, int idshootme, int tmp_rssi){
       schermata_infettato(); // creare stato per inviare che ho infettato
     lastCleanTime = millis() + 3000; // attesa di 1 sec in piu per mostrare la schermata infettato
     //ammo++??
-    stato = 0;
+    stato = 2;
     myValue = 1;
   }
 }
