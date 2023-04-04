@@ -22,19 +22,6 @@ decode_results results;
 IRsend irsend(IRtransmitPin);
 
 
-//stato = 0 : infetto, 1: rabbit, 4: ho infettato, 5: invio hit, 6: death
-int stato                  = 1;     //scelta se essere cacciatore o preda
-int myPlayerID             = 13;     // Player ID: 1 - 99
-
-//myValue = 1: infected, 2: rabbit, 3: risposta hit ir, 4: colpito rssi, 5: death
-int myValue                = stato + 1;
-int idShotMe               = myPlayerID;
-
-long gameTime = 30 * 60 ;
-long gameTimer = gameTime -1; //se metto -1 starta subito
-
-int sogliaRSSI = -60;
-
 void setup() { 
   //initialize Serial Monitor
   Serial.begin(115200);
@@ -90,8 +77,9 @@ void setup() {
 
 
 void loop() {
-  
-  gestioneDisplayOnOff();
+
+  //gestioneDisplayOnOff();
+  triggerRelease();
 
   if(gameTimer == gameTime){
     Serial.println("START GAME!");
@@ -112,28 +100,11 @@ void loop() {
     waitStartGame();
     gameTimer == gameTime;
   }
-    
 
-  if(stato == 0){
-    //SONO L INFETTO, ascolto ricevitore ir e rssi degli altri
-    receiveIR();
-    attesa_msg_infected();
-    if((millis()-lastSendTime)>1000){
-      lastSendTime = millis();
-      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
-      if(displayOnOff == 1 && triggerState == 0)
-        schermata_recv_draws();
-    }
-    if((millis()-lastRecvTime_ctl)>36000){
-      lastRecvTime_ctl = millis();
-      lastCleanTime = millis();
-      memset(senders, 0, sizeof(senders));
-    }
-  }
-
-  if(stato == 1){
-    //HUNTER, invio posizione e ricevo se ho colpito, value = 2
-    attesa_msg_hit();
+  
+  //Stato SANO
+  if(gameState == 1){
+    lora_recv();
     if (millis() - lastSendTime > interval) {
       sendMessage();
       VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
@@ -144,72 +115,81 @@ void loop() {
       lastCleanTime = millis();
       if(displayOnOff == 1)
         schermata_send();
-    }
+    }    
     if(triggerState == 0 && digitalRead(triggerPin) == LOW && ammo > 0){
       shoot();
       triggerState = 1;
       ammo--;
-      //if(ammo <= 0)
-      //  ammo = 16;
+      if(ammo <= 0)
+        ammo = 16;
       if(displayOnOff == 1)
         schermata_send();
     }
-    gestioneTrigger();
+    //triggerRelease();
   }
 
-  if(stato == 2){
-    //SONO L INFETTO, ascolto ricevitore ir e rssi degli altri
-    int j = 0;
-    //invio 3 volte che ho infettato, poi torno ad avere valore infetto
-    while(j < 3 && stato == 2){
-      receiveIR();
-      attesa_msg_infected();
-      if((millis()-lastSendTime)>1000){
-        lastSendTime = millis();
-        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
-        if(displayOnOff == 1 && triggerState == 0)
-          schermata_infettato();
-        j++;
-      }
-      if((millis()-lastRecvTime_ctl)>36000){
-        lastRecvTime_ctl = millis();
-        lastCleanTime = millis();
-        memset(senders, 0, sizeof(senders));
-      }
-    }
-    stato = 0;
-    myValue = 1;
-  }
 
-  //sono infetto e invio di aver infettato
-  if(stato == 4){
+  //Stato stato appena INFETTATO
+  if(gameState == 2){
+    //invio di essermi infettato e aspetto risposta per 3 sec e provo per 2 volte
     int j = 0;
-    //invio 3 volte che ho infettato, poi torno ad avere valore infetto
-    while(j < 4 && stato == 4){
-      receiveIR();
-      attesa_msg_infected();
+    while(j < 2 && gameState == 2){
+      lora_recv();
       if (millis() - lastSendTime > interval) {
         sendMessage();
         VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
         lastSendTime = millis();
-        interval = random(3000) + 9000;    // 9 - 12 seconds
+        interval = random(1000) + 3000;    // 3 - 4 seconds
         circle_size = 18;
         j++;
       }
       if (millis() - lastCircleTime > 300) {
-        schermata_send_infected();
+        schermata_infettato();
         lastCircleTime = millis();
       }
     }
-    stato = 0; //RITORNO INFETTO
-    myValue = 1;
+    lastSendTime = millis();
+    gameState = 3;
   }
 
-  //Sono infetto e sono stato colpito
-  if(stato == 5){
+  //Sono INFETTO
+  if(gameState == 3){
+    //SONO L INFETTO, ascolto ricevitore ir e rssi degli altri
+    receiveIR();
+    lora_recv();
+    if((millis()-lastCleanTime)>1000){
+      lastCleanTime = millis();
+      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
+      if(displayOnOff == 1 && triggerState == 0)
+        schermata_recv_draws();
+    }
+    if((millis()-lastRecvTime_ctl)>36000){
+      lastRecvTime_ctl = millis();
+      lastCleanTime = millis();
+      memset(senders, 0, sizeof(senders));
+    }
+
+    if(triggerState == 0 && digitalRead(triggerPin) == LOW){
+      if (millis() - lastSendTime > interval) {
+        sendMessage();
+        lastSendTime = millis();
+        interval = random(1000) + 4000;    // 4 - 5 secondi
+      }
+      triggerState = 1;
+    }
+    if(triggerState == 1){
+      if(displayOnOff == 1)
+        schermata_send_infected();
+      lastCleanTime = millis();
+    }
+  }
+  
+
+  //sono stato COLPITO
+  if(gameState == 4){
     int j = 0;
     //invio per 2 volte che sono stato colpito per far comparire la scritta HIT all altro giocatore.
-    while(j < 2){
+    while(j < 2 && gameState == 4){
       if (millis() - lastSendTime > interval) {
         sendMessage();
         VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
@@ -219,19 +199,16 @@ void loop() {
       }
       if (millis() - lastCircleTime > 1000) {
         schermata_colpito();
-        VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
-        
         lastCircleTime = millis();
       }
     }
-    stato = 6;
-    myValue = 5;
+    gameState = 5;
   }
 
-  if(stato == 6){
-    attesa_msg(); // aggiorno valori giocatori
+  //sono MORTO
+  if(gameState == 5){
+    lora_recv(); // aggiorno valori giocatori
     if (millis() - lastCircleTime > 1000) {
-      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
       if(displayOnOff == 1)
         schermata_wait();
       lastCircleTime = millis();
@@ -243,13 +220,14 @@ void loop() {
       interval = random(3000) + 9000;    // 9 - 12 seconds
     }
   }
-
-  if(stato == 7){
+    
+  //stato di PROVA
+  if(gameState == 9){
     VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
     //schermata_HIT();
     //schermata_colpito();
     //schermata_infettato();
-    schermata_send_infected();
+    schermata_recv_infected();
     //schermata_wait();
     delay(300);
   }
@@ -294,16 +272,16 @@ void fineGioco(){
         death++;
       }
     }
-  if(stato == 0){
+  if(gameState == 2){
     schermata_win();
   }
   if(infects > 0){
-    if(stato == 1)
+    if(gameState == 0)
       schermata_lose();
     else
       schermata_win();
   }else if(rabbits > 0){
-    if(stato == 1)
+    if(gameState == 0)
       schermata_win();
     else
       schermata_lose();
@@ -333,7 +311,7 @@ void gestioneDisplayOnOff(){
   }
 }
 
-void gestioneTrigger(){
+void triggerRelease(){
   if((millis()-lastTriggerTime)>100){
     lastTriggerTime = millis();
     if(digitalRead(triggerPin) == HIGH ){

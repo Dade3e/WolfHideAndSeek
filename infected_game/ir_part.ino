@@ -18,7 +18,6 @@ void receiveIR() {
 
 void controllo_colpito(int idshotme){
   lastSendTime = millis()-8000;
-  myValue = 3;
-  idShotMe = idshotme;
-  stato = 5; //Stato colpito
+  per_chi = idshotme;
+  gameState = 4; //Stato colpito
 }

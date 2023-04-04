@@ -11,7 +11,6 @@
 //915E6 for North America
 #define BAND 866E6
 
-
 //OLED pins
 #define OLED_SDA 21  //4
 #define OLED_SCL 22 //15
@@ -19,14 +18,30 @@
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
+//Game pins
+#define triggerPin 14
+#define displayPin 12
+#define IRtransmitPin 2
+#define IRreceivePin 13
+#define speakerPin 15
 
-
-const uint8_t vbatPin = 35;
+#define vbatPin 35
 float VBAT;
 
-int txPower = 8;
-int spreadingFactor = 9;
+#define txPower 8
+#define spreadingFactor 12
 
+#define myPlayerID 11     // Player ID: 1 - 99
+
+// Stato 1: Sano, 2: infettato, 3: infetto, 4: colpito, 5: morto;
+int gameState = 1;     //scelta se essere cacciatore o preda
+
+int per_chi    = myPlayerID;
+
+long gameTime = 30 * 60 ;
+long gameTimer = gameTime -1; //se metto -1 starta subito
+
+int sogliaRSSI = -80;
 
 String message_recv = "";
 
@@ -49,14 +64,7 @@ int circle_size=18;
 int triggerState = 0;
 int displayOnOff = 1; // 1 acceso
 
-int msg_counter2 = 0;
-
 int ammo = 16;
 
 
-//Pin declarations
-int triggerPin             = 14;
-int displayPin             = 12;
-int IRtransmitPin          = 2;
-int IRreceivePin           = 13;
-int speakerPin             = 15;
+

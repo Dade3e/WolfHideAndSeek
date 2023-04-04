@@ -24,7 +24,7 @@ void schermata_recv_draws(){
   int k=0;
   int w=0;
   for(int i=0;i<100;i++){
-    if(senders[i] == 2){    // 2: rabbits
+    if(senders[i] == 1){    // 0: sani
       display.drawBitmap(42+(18*w), 29*k, angry_rabbit16, 16, 16, WHITE);
       display.setTextSize(1);
       if(senders_rssi[i] < 100){
@@ -79,7 +79,7 @@ void schermata_send(){
   // bullets
   if(ammo > 0){
     for(int x = 0; x<ammo; x++){
-      display.drawBitmap(40+(10*x/2), 8+((x%2)*24), bullet8X20, 8, 20, WHITE);
+      display.drawBitmap(40+(10*x/2), 4+((x%2)*24), bullet8X20, 8, 20, WHITE);
     }    
   }else{
     display.setCursor(60,28);
@@ -184,25 +184,31 @@ void schermata_infettato(){
 
 void schermata_send_infected(){
   display.clearDisplay();
-  display.drawBitmap(16, 16, infected_rabbit32, 32, 32, WHITE);
+  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
   display.setTextSize(1);
   display.setCursor(74,12);
   display.print("YOU");
   display.setCursor(74,24);
-  display.print("INFECTED");
+  display.print("TRY");
   display.setCursor(74,36);
-  display.print("A");
+  display.print("TO");
   display.setCursor(74,48);
-  display.print("RABBIT");
-
-  if(circle_size<60)
-    display.drawCircle(32,32,circle_size,WHITE);    
-  //display.drawBitmap(48, 16, infected_rabbit32, 32, 32, WHITE);
-
-  display.setCursor(96,56);
-  display.print(interval);
+  display.print("INFECT");
   display.display();
-  circle_size += 2;
+}
+
+void schermata_recv_infected(){
+  display.clearDisplay();
+  display.drawBitmap(16, 16, infected_rabbit32, 32, 32, WHITE);
+  display.setTextSize(1);
+  display.setCursor(72,12);
+  display.print("YOU");
+  display.setCursor(72,24);
+  display.print("INFECTED");
+  display.setCursor(72,36);
+  display.print("A");
+  display.setCursor(72,48);
+  display.print("RABBIT");
   display.display();
 }
 
