@@ -19,8 +19,8 @@
 #define OLED_RST -1 //16
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-
 /*
+
 //LORA32 SENZA PIN BATTERY
 
 //define the pins used by the LoRa transceiver module
@@ -42,12 +42,12 @@
 #define OLED_RST 16
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-
+*/
 
 const uint8_t vbatPin = 35;
 float VBAT;
 
-int txPower = 12;
+int txPower = 8;
 int spreadingFactor = 9;
 
 int myPlayerID = 1;

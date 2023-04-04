@@ -10,7 +10,7 @@
 #include "./variables.h"
 
 
-#define TIME_TO_SLEEP 10 /* Duration ESP32 will go to sleep (seconds) */
+#define TIME_TO_SLEEP 7 /* Duration ESP32 will go to sleep (seconds) */
 #define TIME_UP 2 /* Duration ESP32 stays up (seconds) */
 
 RTC_DATA_ATTR unsigned long msgCounter = 0;
