@@ -25,7 +25,7 @@ const uint8_t vbatPin = 35;
 float VBAT;
 
 int txPower = 8;
-int spreadingFactor = 12;
+int spreadingFactor = 9;
 
 
 String message_recv = "";
