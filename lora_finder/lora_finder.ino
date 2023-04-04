@@ -13,8 +13,6 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RST);
 
-int myPlayerID             = 13;     // Player ID: 1 - 99
-
 int sogliaRSSI = -60;
 
 void setup() { 
@@ -59,7 +57,7 @@ void setup() {
 
 
 void loop() {
-  attesa_msg();
+  attesa_msg_multi();
   if((millis()-attesa)>1000){
     attesa = millis();
     VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
@@ -143,7 +141,7 @@ void attesa_msg(){
     Serial.print("rssi:\t\t");
     Serial.println(rssi);
     int id = (message_recv[0] - '0');
-    if(id == 2){
+    if(id == 0){
       message_id = id;
       message_rssi = rssi;
       message = message_recv.substring(1);
@@ -156,5 +154,34 @@ void attesa_msg(){
       
       lastRecvTime = millis();
     } 
+  }
+}
+
+void attesa_msg_multi(){
+  int packetSize = LoRa.parsePacket();
+  
+  if (packetSize) {
+    Serial.println("");
+    Serial.println("Received packet!");
+    // read the packet
+    message_recv = "";
+    while (LoRa.available()) {
+      message_recv += (char)LoRa.read();
+    }
+    int rssi = LoRa.packetRssi();
+    // print the Packet and RSSI
+    Serial.print("message_recv:\t");
+    Serial.println(message_recv);
+    Serial.print("rssi:\t\t");
+    Serial.println(rssi);
+    int id = (message_recv[0] - '0');
+    senders[id] = id;
+    senders_rssi[id] = rssi;
+
+    message_id = id;
+    message_rssi = rssi;
+    message = message_recv.substring(1);
+
+    lastRecvTime = millis(); 
   }
 }

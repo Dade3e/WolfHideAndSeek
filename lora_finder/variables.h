@@ -22,8 +22,10 @@
 const uint8_t vbatPin = 35;
 float VBAT;
 
-int txPower = 8;
-int spreadingFactor = 12;
+int txPower = 12;
+int spreadingFactor = 9;
+
+int myPlayerID             = 11;     // Player ID: 1 - 99
 
 int message_id = -1;
 int message_rssi = 0;

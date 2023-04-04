@@ -42,15 +42,15 @@
 #define OLED_RST 16
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-*/
+
 
 const uint8_t vbatPin = 35;
 float VBAT;
 
-int txPower = 8;
-int spreadingFactor = 17;
+int txPower = 12;
+int spreadingFactor = 9;
 
-int myPlayerID = 2;
-String message = "BI";
+int myPlayerID = 1;
+String message = "AB";
 
 int msgCount = 0;
