@@ -18,19 +18,25 @@ Inoltre il vecchio wererabbit è immune al nuovo, ma solo a quello, non ai succe
 Allo scadere del tempo mostrato a display, perde chi è il wererabbit o lo sta diventando.
 
 
-### infected
+### Infected
 Ogni giocatore ha un arma e i ricevitori ir.
-Il gioco si divide in infetto e sani,
-Gli infetti non possono sparare, i sani si ma con munizioni limitate.
+Il gioco si divide in infetto e sani.
 
 Il gioco inizia con l'infetto che si nasconde.
 L'infetto ha il sensore di prossimità il quale vede la distanza dai sani.
-Se un infetto entra nel raggio dei 3 metri da un sano, il sano si infetta.
+Se un infetto entra nel raggio dei 5 metri da un sano, può premere il grilletto per infettarlo.
 Se un sano gli spara prima, l'infetto muore.
 
-Il gioco finisce con lo scadere del tempo e vincono gli infetti se vengono infettati tutti i sani,
-Invece vincono i sani se muoiono tutti gli infetti.
-Altrimenti è parità.
+Il gioco finisce con lo scadere del tempo.
+Vincono i più numerosi tra sani e infetti.
+
+### Deathmatch
+Classico deathmatch a scquadre o tutti contro tutti,
+Se si imposta l'id team a 99, non ci sono squadre e sarà tutti contro tutti.
+Una volta colpiti anche solo una volta si muore.
+Il gioco finisce allo scadere del tempo.
+TODO: vincita?
+TODO: tornare alla base per riprendere vita?
 
 ### Materiali utilizzati:
 - Presa Jack verticale 4 poli: https://www.amazon.it/dp/B089222S84?psc=1&ref=ppx_yo2ov_dt_b_product_details
