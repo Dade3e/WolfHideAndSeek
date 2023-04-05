@@ -2,13 +2,17 @@ void sendMessage() {
 
   String myid = "";
   String for_who = "";
+  String team = "";
   if(myPlayerID < 10){
     myid = "0";
   }
   if(per_chi < 10){
     for_who = "0";
   }
-  String outgoing = myid + String(myPlayerID) + for_who +  String(per_chi) + String(gameState);
+  if(myTeamID < 10){
+    team = "0";
+  }
+  String outgoing = myid + String(myPlayerID) + for_who +  String(per_chi) + team +  String(myTeamID) + String(gameState);
 
   LoRa.beginPacket();
   LoRa.print(outgoing);                 // add payload
@@ -37,7 +41,11 @@ void lora_recv(){
     Serial.println(rssi);
     int da_chi = (message_recv[0] - '0')*10+(message_recv[1] - '0');
     int for_who = (message_recv[2] - '0')*10+(message_recv[3] - '0');
+    int team = (message_recv[4] - '0')*10+(message_recv[5] - '0');
     int suo_valore = message_recv[4] - '0';
+
+    senders[da_chi] = suo_valore;
+    senders_team[da_chi] = team;
     check_message(da_chi, for_who, suo_valore, rssi);
     
     lastRecvTime = millis();

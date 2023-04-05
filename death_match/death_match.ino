@@ -112,6 +112,12 @@ void loop() {
       if(displayOnOff == 1 && triggerState == 0)
         schermata_ammo();
     }
+    if (millis() - lastSendTime > interval) {
+      sendMessage();
+      VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
+      lastSendTime = millis();            // timestamp the message
+      interval = random(3000) + minSendTime;    // 60 - 63 seconds
+    }
 
     if(triggerState == 0 && digitalRead(triggerPin) == LOW && ammo > 0){
       shoot();
@@ -146,18 +152,18 @@ void loop() {
 
   //sono MORTO
   if(gameState == 3){
-    //lora_recv(); // aggiorno valori giocatori
+    lora_recv(); // aggiorno valori giocatori
     if (millis() - lastCleanTime > 1000) {
       if(displayOnOff == 1)
         schermata_wait();
       lastCleanTime = millis();
     }
-    /*if (millis() - lastSendTime > interval) {
+    if (millis() - lastSendTime > interval) {
       sendMessage();
       VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
       lastSendTime = millis();            // timestamp the message
-      interval = random(3000) + 9000;    // 9 - 12 seconds
-    }*/
+      interval = random(3000) + minSendTime;    // 9 - 12 seconds
+    }
   }
 
   //stato di PROVA
@@ -197,10 +203,37 @@ void waitStartGame(){
 }
 
 void fineGioco(){
-  if(gameState == 1)
+  int infects = 0;
+  int rabbits = 0;
+  int death = 0;
+  for(int i = 0; i<100; i++){
+    if(senders[i] == 1){
+      infects++;
+    }
+    else if(senders[i] == 2){
+      rabbits++;
+    }
+    else{
+      death++;
+    }
+  }
+  if(gameState == 2){
     schermata_win();
-  else
+  }
+  if(infects > 0){
+    if(gameState == 0)
+      schermata_lose();
+    else
+      schermata_win();
+  }else if(rabbits > 0){
+    if(gameState == 0)
+      schermata_win();
+    else
+      schermata_lose();
+  }else{
     schermata_lose();
+  }
+
 }
 
 //gestione display ON OFF

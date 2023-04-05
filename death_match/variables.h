@@ -34,6 +34,8 @@ float VBAT;
 #define myPlayerID 11     // Player ID: 1 - 99
 #define myTeamID 99       // 99 tutti contro tutti
 
+#define minSendTime 60000
+
 // Stato 1: In Game; 2: colpito; 3: morto
 int gameState = 1;     //scelta se essere cacciatore o preda
 
@@ -58,6 +60,9 @@ int triggerState = 0;
 int displayOnOff = 1; // 1 acceso
 
 int ammo = 16;
+
+int senders[100];
+int senders_team[100];
 
 
 
