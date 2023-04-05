@@ -208,10 +208,10 @@ void loop() {
   //sono MORTO
   if(gameState == 5){
     lora_recv(); // aggiorno valori giocatori
-    if (millis() - lastCircleTime > 1000) {
+    if (millis() - lastCleanTime > 1000) {
       if(displayOnOff == 1)
         schermata_wait();
-      lastCircleTime = millis();
+      lastCleanTime = millis();
     }
     if (millis() - lastSendTime > interval) {
       sendMessage();
