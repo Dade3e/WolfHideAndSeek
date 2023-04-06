@@ -24,6 +24,7 @@ void controllo_colpito(int idshotme, int teamshotme){
     lastSendTime = millis()-8000;
     per_chi = idshotme;
     gameState = 2; //Stato colpito
+    digitalWrite(speakerPin, HIGH);
   }// altrimenti fuoco amico
   
 }

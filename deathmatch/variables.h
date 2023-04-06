@@ -67,5 +67,6 @@ int senders[100];
 int senders_team[100];
 int senders_kills[100];
 
+int blink = 0;
 
 

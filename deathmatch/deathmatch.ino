@@ -35,6 +35,7 @@ void setup() {
 
   digitalWrite(triggerPin, HIGH);
   digitalWrite(displayPin, HIGH);
+  digitalWrite(speakerPin, HIGH);
 
   irsend.begin();
   irrecv.enableIRIn();
@@ -73,6 +74,7 @@ void setup() {
   first_frame();
 
   Serial.println("Setup OK!");
+  digitalWrite(speakerPin, LOW);
 }
 
 
@@ -148,15 +150,18 @@ void loop() {
     }
     lastSendTime = millis();
     gameState = 3;
+    digitalWrite(speakerPin, LOW);
   }
 
   //sono MORTO
   if(gameState == 3){
     lora_recv(); // aggiorno valori giocatori
+    digitalWrite(speakerPin, blink);
     if (millis() - lastCleanTime > 1000) {
       if(displayOnOff == 1)
         schermata_wait();
       lastCleanTime = millis();
+      blink = (blink *-1) +1;
     }
     if (millis() - lastSendTime > interval) {
       sendMessage();
