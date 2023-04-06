@@ -31,7 +31,7 @@ float VBAT;
 #define txPower 8
 #define spreadingFactor 12
 
-#define myPlayerID 11     // Player ID: 1 - 99
+#define myPlayerID 13     // Player ID: 1 - 99
 #define myTeamID 99       // 99 tutti contro tutti
 
 #define minSendTime 60000

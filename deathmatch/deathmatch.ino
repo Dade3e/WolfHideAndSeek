@@ -210,7 +210,7 @@ void fineGioco(){
     if(senders[i] == 1 ){
       //il giorcatore i e' vivo, cerco se il suo team e' gia nella array teams
       bool unmod = true;
-      for (int j=0;j<w j++){
+      for (int j=0;j<w; j++){
         if(list_teams[w] == senders_team[i]){
           array_counter[w] += 1;
           unmod = false;
@@ -225,7 +225,7 @@ void fineGioco(){
     }
   }
   // cerco il valore max
-  int maxValue = array_counter[maxIndex];
+  int maxValue = array_counter[0];
 
   for(int i = 1; i < w; i++)
   {

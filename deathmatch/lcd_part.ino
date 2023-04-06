@@ -14,10 +14,14 @@ void schermata_ammo(){
   display.clearDisplay();
   display.setTextSize(1);
   display.setCursor(0,0);
-  display.print("TEAM");
-  display.setCursor(0,10);
   display.print("ID");
-  display.setCursor(0,20);
+  display.setCursor(0,10);
+  display.print(myPlayerID);
+  display.setCursor(0,28);
+  display.print("TEAM");
+  display.setCursor(0,38);
+  display.print("ID ");
+  //display.setCursor(0,20);
   display.print(myTeamID);
   // bullets
   if(ammo > 0){
@@ -30,9 +34,9 @@ void schermata_ammo(){
   }
   
   display.setCursor(0,56);
-  display.print("Id:");
-  display.print(myPlayerID);
-  display.setCursor(56,56);
+  display.print("Kills ");
+  display.print(kills);
+  display.setCursor(64,56);
   display.print(gameTimer);
   display.setCursor(100,56);
   display.print(VBAT);
