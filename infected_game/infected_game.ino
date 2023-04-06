@@ -233,7 +233,7 @@ void loop() {
     //schermata_HIT();
     //schermata_colpito();
     //schermata_infettato();
-    schermata_recv_infected();
+    schermata_patta();
     //schermata_wait();
     delay(300);
   }
@@ -264,35 +264,32 @@ void waitStartGame(){
 }
 
 void fineGioco(){
-  int infects = 0;
-  int rabbits = 0;
+  int infetti = 0;
+  int sani = 0;
   int death = 0;
   for(int i = 0; i<100; i++){
-      if(senders[i] == 1){
-        infects++;
-      }
-      else if(senders[i] == 2){
-        rabbits++;
-      }
-      else{
-        death++;
-      }
+    if(senders[i] == 1){
+      sani++;
     }
-  if(gameState == 2){
-    schermata_win();
+    else if(senders[i] == 2 || senders[i] == 3){
+      infetti++;
+    }
+    else{
+      death++;
+    }
   }
-  if(infects > 0){
-    if(gameState == 0)
-      schermata_lose();
-    else
+  if(sani > infetti){
+    if(gameState == 1)
       schermata_win();
-  }else if(rabbits > 0){
-    if(gameState == 0)
+    else
+      schermata_lose();
+  }else if (infetti < sani){
+    if(gameState == 2 || gameState == 3)
       schermata_win();
     else
       schermata_lose();
   }else{
-    schermata_lose();
+    schermata_patta();
   }
 
 }

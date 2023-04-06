@@ -255,3 +255,16 @@ void schermata_lose(){
   display.print("LOSE");
   display.display();
 }
+void schermata_patta(){
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.drawBitmap(0, 0, infected_rabbit64, 64, 64, WHITE);
+  display.setTextSize(1);
+  display.setCursor(64,6);
+  display.print("INFECTED");
+  display.setCursor(92,16);
+  display.print("RABBIT");
+  display.setCursor(76,40);
+  display.print("PARITY");
+  display.display();
+}
