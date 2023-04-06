@@ -20,4 +20,5 @@ void controllo_colpito(int idshotme){
   lastSendTime = millis()-8000;
   per_chi = idshotme;
   gameState = 4; //Stato colpito
+  digitalWrite(speakerPin, HIGH);
 }

@@ -57,6 +57,7 @@ void check_message(int da_chi, int for_who, int suo_valore, int rssi){
       lastCleanTime = millis() + 3000; //attesa per mostrare la schermata per 3 sec
       per_chi = da_chi;      
       gameState = 2;
+      digitalWrite(speakerPin, HIGH);
     }
     else if(for_who == myPlayerID && suo_valore == 4){
       //ho la conferma di aver colpito un infetto

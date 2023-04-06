@@ -66,5 +66,7 @@ int displayOnOff = 1; // 1 acceso
 
 int ammo = 16;
 
+int blink = 0;
+
 
 

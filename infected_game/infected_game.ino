@@ -35,6 +35,7 @@ void setup() {
 
   digitalWrite(triggerPin, HIGH);
   digitalWrite(displayPin, HIGH);
+  digitalWrite(speakerPin, HIGH);
 
   irsend.begin();
   irrecv.enableIRIn();
@@ -71,6 +72,7 @@ void setup() {
   Serial.println("LoRa Initializing OK!");
 
   infected_first_frame();
+  digitalWrite(speakerPin, LOW);
 
   Serial.println("Setup OK!");
 }
@@ -150,6 +152,7 @@ void loop() {
     }
     lastSendTime = millis();
     gameState = 3;
+    digitalWrite(speakerPin, LOW);
   }
 
   //Sono INFETTO
@@ -203,15 +206,18 @@ void loop() {
       }
     }
     gameState = 5;
+    digitalWrite(speakerPin, LOW);
   }
 
   //sono MORTO
   if(gameState == 5){
+    digitalWrite(speakerPin, blink);
     lora_recv(); // aggiorno valori giocatori
     if (millis() - lastCleanTime > 1000) {
       if(displayOnOff == 1)
         schermata_wait();
       lastCleanTime = millis();
+      blink = (blink *-1) +1;
     }
     if (millis() - lastSendTime > interval) {
       sendMessage();
