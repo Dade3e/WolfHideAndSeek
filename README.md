@@ -24,7 +24,7 @@ Il gioco si divide in infetto e sani.
 
 Il gioco inizia con l'infetto che si nasconde.
 L'infetto ha il sensore di prossimità il quale vede la distanza dai sani.
-Se un infetto entra nel raggio dei 5 metri da un sano, può premere il grilletto per infettarlo.
+Se un sano entra nel raggio dei 5 metri da un infetto, l'infetto può premere il grilletto per infettare il sano.
 Se un sano gli spara prima, l'infetto muore.
 
 Il gioco finisce con lo scadere del tempo.
