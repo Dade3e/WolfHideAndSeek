@@ -211,6 +211,34 @@ void fineGioco(){
   int list_teams[100];
   int array_counter[100];
   int w = 0;
+  int maxValue = 0;
+  int array_index_winners[100];
+
+  //controllo tutti contro tutti
+  for(int i = 0; i<100; i++){
+    if(senders[i] == 1 && senders_team[i] == 99){
+      if(senders_kills[i] > maxValue)
+        maxValue = senders_kills[i];
+    }
+  }
+  if(maxValue != 0){
+    //Cerco indici col valore max, per vedere se ho piu vincitori e salvo gli indici!
+    int q = 0;
+    for(int i = 1; i < 100; i++){
+      if(senders_kills[i] == maxValue){
+        array_index_winners[q] = i;     //array con gli indici dei valori piu alti del array_counter
+        q++;
+      }    
+    }
+    for(int i = 1; i < q; i++){
+      if(myTeamID == list_teams[array_index_winners[i]])  //ma wtf, ce che cazzo
+        schermata_win();
+      else
+        schermata_lose();
+    }
+  }  
+  
+  w = 0;
   for(int i = 0; i<100; i++){
     if(senders[i] == 1 ){
       //il giorcatore i e' vivo, cerco se il suo team e' gia nella array teams
@@ -230,7 +258,7 @@ void fineGioco(){
     }
   }
   // cerco il valore max
-  int maxValue = array_counter[0];
+  maxValue = array_counter[0];
 
   for(int i = 1; i < w; i++)
   {
