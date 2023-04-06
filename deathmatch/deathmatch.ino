@@ -203,37 +203,51 @@ void waitStartGame(){
 }
 
 void fineGioco(){
-  int infects = 0;
-  int rabbits = 0;
-  int death = 0;
+  int list_teams[100];
+  int array_counter[100];
+  int w = 0;
   for(int i = 0; i<100; i++){
-    if(senders[i] == 1){
-      infects++;
-    }
-    else if(senders[i] == 2){
-      rabbits++;
-    }
-    else{
-      death++;
+    if(senders[i] == 1 ){
+      //il giorcatore i e' vivo, cerco se il suo team e' gia nella array teams
+      bool unmod = true;
+      for (int j=0;j<w j++){
+        if(list_teams[w] == senders_team[i]){
+          array_counter[w] += 1;
+          unmod = false;
+        }
+      }
+      //se non viene modificato, non ho trovato il team e lo aggiungo
+      if(unmod){
+        list_teams[w] = senders_team[i];
+        array_counter[w] += 1;
+        w++;        
+      }
     }
   }
-  if(gameState == 2){
-    schermata_win();
-  }
-  if(infects > 0){
-    if(gameState == 0)
-      schermata_lose();
-    else
-      schermata_win();
-  }else if(rabbits > 0){
-    if(gameState == 0)
-      schermata_win();
-    else
-      schermata_lose();
-  }else{
-    schermata_lose();
-  }
+  // cerco il valore max
+  int maxValue = array_counter[maxIndex];
 
+  for(int i = 1; i < w; i++)
+  {
+      if(array_counter[i] > maxValue) {
+          maxValue = array_counter[i];
+      }
+  }
+  //Cerco indici col valore max, per vedere se ho piu vincitori e salvo gli indici!
+  int array_counter_patta[w];
+  int q = 0;
+  for(int i = 1; i < w; i++){
+    if(array_counter[i] == maxValue){
+      array_counter_patta[q] = i;     //array con gli indici dei valori piu alti del array_counter
+      q++;
+    }    
+  }
+  for(int i = 1; i < q; i++){
+    if(myTeamID == list_teams[array_counter_patta[i]])  //ma wtf, ce che cazzo
+      schermata_win();
+    else
+      schermata_lose();
+  }
 }
 
 //gestione display ON OFF

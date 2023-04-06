@@ -56,6 +56,8 @@ unsigned long lastRecvTime = 0;
 
 int interval = 2000;          // interval between sends
 
+int kills = 0;
+
 int triggerState = 0;
 int displayOnOff = 1; // 1 acceso
 
@@ -63,6 +65,7 @@ int ammo = 16;
 
 int senders[100];
 int senders_team[100];
+int senders_kills[100];
 
 
 
