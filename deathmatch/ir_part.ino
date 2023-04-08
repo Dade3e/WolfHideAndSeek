@@ -20,11 +20,10 @@ void receiveIR() {
 
 void controllo_colpito(int idshotme, int teamshotme){
   // 99 è tutt contro tutti
-  if(teamshotme == 99 || teamshotme != myTeamID){
-    lastSendTime = millis()-8000;
+  if((teamshotme == 99 || teamshotme != myTeamID) && idshotme != myPlayerID){
     per_chi = idshotme;
     gameState = 2; //Stato colpito
-    digitalWrite(speakerPin, HIGH);
+    digitalWrite(speakerPin, LOW);
   }// altrimenti fuoco amico
   
 }

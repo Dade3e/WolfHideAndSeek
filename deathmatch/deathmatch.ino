@@ -35,7 +35,7 @@ void setup() {
 
   digitalWrite(triggerPin, HIGH);
   digitalWrite(displayPin, HIGH);
-  digitalWrite(speakerPin, HIGH);
+  digitalWrite(speakerPin, LOW);
 
   irsend.begin();
   irrecv.enableIRIn();
@@ -74,7 +74,7 @@ void setup() {
   first_frame();
 
   Serial.println("Setup OK!");
-  digitalWrite(speakerPin, LOW);
+  digitalWrite(speakerPin, HIGH);
 }
 
 
@@ -137,7 +137,9 @@ void loop() {
     //per_chi = 13;
     //invio di essermi infettato e aspetto risposta per 3 sec e provo per 2 volte
     int j = 0;
+    sendMessage();
     schermata_colpito();
+    lastSendTime = millis();
     while(j < 2 && gameState == 2){
       lora_recv();
       if (millis() - lastSendTime > interval) {
@@ -150,7 +152,7 @@ void loop() {
     }
     lastSendTime = millis();
     gameState = 3;
-    digitalWrite(speakerPin, LOW);
+    digitalWrite(speakerPin, HIGH);
   }
 
   //sono MORTO

@@ -42,7 +42,7 @@ int gameState = 1;     //scelta se essere cacciatore o preda
 int per_chi    = myPlayerID;
 
 long gameTime = 30 * 60 ;
-long gameTimer = gameTime -1; //se metto -1 starta subito
+long gameTimer = gameTime; //se metto -1 starta subito
 
 int sogliaRSSI = -80;
 
