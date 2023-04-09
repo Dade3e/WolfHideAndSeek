@@ -23,7 +23,7 @@ void controllo_colpito(int idshotme, int teamshotme){
   if((teamshotme == 99 || teamshotme != myTeamID) && idshotme != myPlayerID){
     per_chi = idshotme;
     gameState = 2; //Stato colpito
-    digitalWrite(speakerPin, LOW);
+    digitalWrite(speakerPin, HIGH);
   }// altrimenti fuoco amico
   
 }

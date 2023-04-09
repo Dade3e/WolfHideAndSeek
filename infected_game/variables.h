@@ -31,7 +31,7 @@ float VBAT;
 #define txPower 8
 #define spreadingFactor 12
 
-#define myPlayerID 11     // Player ID: 1 - 99
+#define myPlayerID 18     // Player ID: 1 - 99
 
 // Stato 1: Sano, 2: infettato, 3: infetto, 4: colpito, 5: morto;
 int gameState = 1;     //scelta se essere cacciatore o preda
@@ -39,7 +39,7 @@ int gameState = 1;     //scelta se essere cacciatore o preda
 int per_chi    = myPlayerID;
 
 long gameTime = 30 * 60 ;
-long gameTimer = gameTime -1; //se metto -1 starta subito
+long gameTimer = gameTime; //se metto -1 starta subito
 
 int sogliaRSSI = -80;
 

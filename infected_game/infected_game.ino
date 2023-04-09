@@ -80,7 +80,7 @@ void setup() {
 
 void loop() {
 
-  //gestioneDisplayOnOff();
+  gestioneDisplayOnOff();
   triggerRelease();
 
   if(gameTimer == gameTime){
@@ -135,6 +135,8 @@ void loop() {
   if(gameState == 2){
     //invio di essermi infettato e aspetto risposta per 3 sec e provo per 2 volte
     int j = 0;
+    sendMessage();
+    lastSendTime = millis();
     while(j < 2 && gameState == 2){
       lora_recv();
       if (millis() - lastSendTime > interval) {
@@ -146,7 +148,8 @@ void loop() {
         j++;
       }
       if (millis() - lastCircleTime > 300) {
-        schermata_infettato();
+        if(displayOnOff == 1)
+          schermata_infettato();
         lastCircleTime = millis();
       }
     }
@@ -166,7 +169,7 @@ void loop() {
       if(displayOnOff == 1 && triggerState == 0)
         schermata_recv_draws();
     }
-    if((millis()-lastRecvTime_ctl)>36000){
+    if((millis()-lastRecvTime_ctl)>72000){
       lastRecvTime_ctl = millis();
       lastCleanTime = millis();
       memset(senders, 0, sizeof(senders));
@@ -192,7 +195,10 @@ void loop() {
   if(gameState == 4){
     int j = 0;
     //invio per 2 volte che sono stato colpito per far comparire la scritta HIT all altro giocatore.
+    sendMessage();
+    lastSendTime = millis();
     while(j < 2 && gameState == 4){
+      lora_recv();
       if (millis() - lastSendTime > interval) {
         sendMessage();
         VBAT = (float)(analogRead(vbatPin)) / 4095*2*3.3*1.1;
@@ -201,7 +207,8 @@ void loop() {
         j++;
       }
       if (millis() - lastCircleTime > 1000) {
-        schermata_colpito();
+        if(displayOnOff == 1)
+          schermata_colpito();
         lastCircleTime = millis();
       }
     }

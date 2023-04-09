@@ -62,6 +62,8 @@ void check_message(int da_chi, int for_who, int suo_valore, int rssi){
     else if(for_who == myPlayerID && suo_valore == 4){
       //ho la conferma di aver colpito un infetto
       schermata_HIT();
+      per_chi = da_chi;
+      sendMessage();
       lastCleanTime = millis();
     }
   }
@@ -79,10 +81,22 @@ void check_message(int da_chi, int for_who, int suo_valore, int rssi){
   else if(gameState == 3){
     //controllo se ho infettato
     if(suo_valore == 2 && for_who == myPlayerID){
-      schermata_recv_infected();
+      if(displayOnOff == 1)
+        schermata_recv_infected();
       per_chi = da_chi;
       sendMessage();
       lastCleanTime = millis();
+      memset(senders, 0, sizeof(senders));
+    }
+  }
+
+  //invio morte
+  else if(gameState == 4){
+    //controllo se ho infettato
+     if(for_who == myPlayerID){
+      gameState = 5;
+      per_chi = da_chi;
+      lastSendTime = millis()-6000;
     }
   }
 }

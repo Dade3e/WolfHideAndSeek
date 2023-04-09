@@ -35,7 +35,7 @@ void setup() {
 
   digitalWrite(triggerPin, HIGH);
   digitalWrite(displayPin, HIGH);
-  digitalWrite(speakerPin, LOW);
+  digitalWrite(speakerPin, HIGH);
 
   irsend.begin();
   irrecv.enableIRIn();
@@ -74,13 +74,13 @@ void setup() {
   first_frame();
 
   Serial.println("Setup OK!");
-  digitalWrite(speakerPin, HIGH);
+  digitalWrite(speakerPin, LOW);
 }
 
 
 void loop() {
 
-  //gestioneDisplayOnOff();
+  gestioneDisplayOnOff();
   triggerRelease();
 
   if(gameTimer == gameTime){
@@ -151,8 +151,8 @@ void loop() {
       }
     }
     lastSendTime = millis();
-    gameState = 3;
-    digitalWrite(speakerPin, HIGH);
+    gameState = 3;            //se metto 1 diventa un tester, 3 normale
+    digitalWrite(speakerPin, LOW);
   }
 
   //sono MORTO
